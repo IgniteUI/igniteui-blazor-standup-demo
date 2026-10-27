@@ -59,9 +59,15 @@
     align-items: center;
     gap: 6px;
     margin-top: 4px;
+    width: fit-content;
     color: var(--ig-primary-300);
     font-family: var(--font-mono);
     font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.presenter-handle:hover {
+    text-decoration: underline;
 }
 
 .visual {

@@ -6,15 +6,19 @@
     gap: clamp(20px, 4vh, 44px);
 }
 
+.thanks-head {
+    text-align: center;
+}
+
 .thanks-h {
     font-size: clamp(2.4rem, 4.4vw, 4.4rem);
 }
 
 .qr-row {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
     gap: 24px;
-    max-width: 1100px;
 }
 
 .qr-tile {
@@ -39,7 +43,6 @@
     overflow: hidden;
 }
 
-.qr-tile h3,
 .qr-tile h3 {
     margin: 12px 0 4px;
 }
@@ -81,17 +84,15 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    color: var(--ig-primary-300);
+    text-decoration: none;
+}
+
+.handles:hover {
+    text-decoration: underline;
 }
 
 .logo {
     width: 56px;
 }
 
-.discord {
-    color: var(--ig-primary-300);
-    text-decoration: none;
-}
-
-.discord:hover {
-    text-decoration: underline;
-}

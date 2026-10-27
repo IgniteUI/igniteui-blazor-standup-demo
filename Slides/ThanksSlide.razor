@@ -25,9 +25,9 @@
                 <IgbAvatar thanks-slide Src="@p.Avatar" Alt="@p.Name" Shape="AvatarShape.Circle" class="avatar" />
                 <div>
                     <div class="name">@p.Name</div>
-                    <div class="muted handles">
+                    <a class="handles" href="https://github.com/@p.GitHub" target="_blank" rel="noopener">
                         <IgbIcon IconName="github" Collection="@Icons.Collection" /> @p.GitHub
-                    </div>
+                    </a>
                 </div>
             </div>
         }
