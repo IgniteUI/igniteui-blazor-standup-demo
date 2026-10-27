@@ -1,0 +1,62 @@
+<div class="title-slide">
+    <section class="hero">
+        <span class="kicker">Blazor Community Standup</span>
+        <h1 class="slide-h hero-h">
+            Ignite UI for Blazor<br />
+            <span class="accent">is open source</span>
+        </h1>
+        <p class="lead">
+            50+ MIT-licensed Blazor UI components, plus a lightweight data grid.
+        </p>
+
+        <div class="packages">
+            <IgbChip Variant="StyleVariant.Primary">
+                <IgbIcon slot="start" IconName="nuget" Collection="@Icons.Collection" />
+                IgniteUI.Blazor.Lite <b>1.0</b>
+            </IgbChip>
+            <IgbChip Variant="StyleVariant.Primary">
+                <IgbIcon slot="start" IconName="nuget" Collection="@Icons.Collection" />
+                IgniteUI.Blazor.GridLite <b>1.0</b>
+            </IgbChip>
+            <IgbChip Variant="StyleVariant.Success">
+                <IgbIcon slot="start" IconName="favorite" Collection="@Icons.Collection" />
+                MIT
+            </IgbChip>
+        </div>
+
+        <div class="presenters">
+            @foreach (var p in Presenters.All)
+            {
+                <div class="presenter">
+                    <IgbAvatar title-slide Src="@p.Avatar" Alt="@p.Name" Shape="AvatarShape.Circle" class="presenter-avatar" />
+                    <div>
+                        <div class="presenter-name">@p.Name</div>
+                        <div class="muted">Infragistics</div>
+                        <div class="presenter-handle">
+                            <IgbIcon IconName="github" Collection="@Icons.Collection" /> @p.GitHub
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+
+    <section class="visual">
+        <div class="orbit">
+            <img class="rocket" src="img/ignite-ui.png" alt="" />
+        </div>
+        <IgbCard title-slide class="qr-card">
+            <IgbCardContent title-slide class="qr-content">
+                <IgbQrCode title-slide Value="https://github.com/IgniteUI/igniteui-blazor" Size="168"
+                           DotStyle="QrDotStyle.Rounded" SquareStyle="QrCornerSquareStyle.Rounded"
+                           ErrorLevel="QrErrorCorrectionLevel.Quartile"
+                           LogoSrc="img/ignite-ui.png" LogoSize="0.5" />
+                <div class="qr-caption">github.com/IgniteUI/igniteui-blazor</div>
+            </IgbCardContent>
+        </IgbCard>
+        <div class="live-badge">
+            <IgbBadge Variant="StyleVariant.Success" Dot="true" />
+            Everything on screen is a running Blazor WASM app
+        </div>
+    </section>
+</div>

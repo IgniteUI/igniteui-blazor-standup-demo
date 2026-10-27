@@ -1,0 +1,114 @@
+.toolbar {
+    gap: 10px;
+    flex-wrap: nowrap;
+    --ig-size: 1;
+}
+
+.tiles {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    --ig-size: 1;
+    --ig-tile-manager-background: transparent;
+    --ig-tile-manager-tile-background: var(--surface-2);
+    --ig-tile-manager-content-background: transparent;
+}
+
+/* Let tile content fill the tile, so lists, grids and the carousel can size to it */
+.tiles igc-tile::part(base) {
+    display: flex;
+    flex-direction: column;
+}
+
+.tiles igc-tile::part(content-container) {
+    flex: 1;
+    min-height: 0;
+}
+
+.tiles span[slot="title"] {
+    font-size: 1rem;
+}
+
+.tile-body {
+    padding: 0 16px 16px;
+}
+
+.kpi {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.kpi-value {
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.calendar {
+    height: 100%;
+}
+
+.sessions {
+    height: 100%;
+    overflow: auto;
+}
+
+.session-end {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.seats {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 8em;
+    font-size: 0.8rem;
+}
+
+.booked {
+    width: 100%;
+}
+
+.empty {
+    display: grid;
+    place-items: center;
+    height: 100%;
+}
+
+.carousel {
+    height: 100%;
+}
+
+.highlight {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 16px 24px 36px;
+    border-left: 4px solid var(--accent);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 25%, transparent), transparent 70%);
+}
+
+.highlight h3 {
+    margin: 0 0 8px;
+    font-size: 1.6rem;
+    color: var(--accent);
+}
+
+.highlight p {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+}
+
+.mini-grid {
+    display: grid;
+    height: 100%;
+    min-height: 0;
+}

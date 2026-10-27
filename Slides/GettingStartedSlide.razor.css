@@ -1,0 +1,90 @@
+.workspace {
+    flex: 1;
+    min-height: 0;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--surface-2);
+    overflow: hidden;
+}
+
+.pane {
+    height: 100%;
+    overflow: auto;
+    padding: 16px 20px;
+}
+
+.explorer-pane {
+    background: rgb(0 0 0 / 0.15);
+}
+
+.content-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.steps {
+    flex: 1;
+    min-height: 0;
+}
+
+.step-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 8px;
+}
+
+.step-body p {
+    margin: 0;
+}
+
+.theme-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px dashed var(--line);
+    background: var(--ig-surface-500);
+    transition: background-color 200ms;
+}
+
+.use-step .live {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px dashed var(--line);
+}
+
+.step-nav {
+    justify-content: flex-end;
+}
+
+.shortcut {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px dashed var(--ig-success-500);
+    background: rgb(78 184 98 / 0.08);
+}
+
+.shortcut.soon {
+    border-color: var(--brand-orange);
+    background: rgb(240 90 43 / 0.08);
+}
+
+.shortcut-head {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.shortcut-head .muted {
+    font-size: 0.85rem;
+}

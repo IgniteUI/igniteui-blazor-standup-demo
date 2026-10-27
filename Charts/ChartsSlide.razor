@@ -1,0 +1,115 @@
+@namespace StandupDemo.Charts
+@using global::ApexCharts
+
+<div class="slide-grid wide-demo">
+    <section class="slide-copy">
+        <span class="kicker">Open source · ApexCharts</span>
+        <h1 class="slide-h">Open source charts with <span class="accent">ApexCharts</span></h1>
+        <p class="lead">
+            ApexCharts is part of Infragistics and open source as well.
+            <a href="https://github.com/apexcharts/Blazor-ApexCharts" target="_blank" rel="noopener"><b>Blazor-ApexCharts</b></a>
+            is a great pairing with Ignite UI Lite.
+        </p>
+
+        <div class="panel chart-controls">
+            <div class="field">
+                <label>Series type</label>
+                <IgbButtonGroup Selection="ButtonGroupSelection.SingleRequired" Select="OnType">
+                    <IgbToggleButton Value="bar" Selected="true">Bar</IgbToggleButton>
+                    <IgbToggleButton Value="line">Line</IgbToggleButton>
+                    <IgbToggleButton Value="area">Area</IgbToggleButton>
+                </IgbButtonGroup>
+            </div>
+            <div class="field">
+                <label>Tracks</label>
+                <div class="row chips">
+                    @foreach (var t in allTracks)
+                    {
+                        var track = t;
+                        <IgbChip Selectable="true" @bind-Selected:get="tracks.Contains(track)" @bind-Selected:set="(bool on) => ToggleTrack(track, on)">@track</IgbChip>
+                    }
+                </div>
+            </div>
+            <div class="field">
+                <label>Demand boost: <b>+@boost%</b></label>
+                <IgbSlider TValue="int" @bind-Value="boost" @bind-Value:after="RefreshChart" Min="0" Max="50" Step="5" />
+            </div>
+            <IgbSwitch @bind-Checked="showSeats" @bind-Checked:after="RefreshChart">Show capacity</IgbSwitch>
+        </div>
+    </section>
+
+    <section class="slide-demo">
+        <div class="panel chart-panel">
+            <ApexChart @key="chartKey" @ref="chart" TItem="TrackStats" Options="options" Height="@("100%")">
+                <ApexPointSeries TItem="TrackStats" Items="data" Name="Booked" SeriesType="seriesType"
+                                 XValue="t => t.Track" YValue="t => t.Booked" />
+                @if (showSeats)
+                {
+                    <ApexPointSeries TItem="TrackStats" Items="data" Name="Seats" SeriesType="seriesType"
+                                     XValue="t => t.Track" YValue="t => t.Seats" />
+                }
+            </ApexChart>
+        </div>
+        <div class="grid-panel">
+            <IgbGridLite TItem="TrackStats" Data="data" class="grid">
+                <IgbGridLiteColumn Field="@nameof(TrackStats.Track)" Header="Track" Sortable />
+                <IgbGridLiteColumn Field="@nameof(TrackStats.Booked)" Header="Booked" DataType="GridLiteColumnDataType.Number" Sortable />
+                <IgbGridLiteColumn Field="@nameof(TrackStats.Seats)" Header="Seats" DataType="GridLiteColumnDataType.Number" Sortable />
+            </IgbGridLite>
+        </div>
+    </section>
+</div>
+
+@code {
+    private static readonly List<TrackStats> baseline = TrackStats.All;
+    private static readonly string[] allTracks = baseline.Select(t => t.Track).ToArray();
+
+    private ApexChart<TrackStats>? chart;
+    private ApexChartOptions<TrackStats> options = ChartOptions.Dark<TrackStats>();
+    private readonly HashSet<string> tracks = [.. allTracks];
+    private SeriesType seriesType = SeriesType.Bar;
+    private bool showSeats = true;
+    private int boost;
+    private int chartKey;
+
+    // Rebuilt only when the tracks or the boost change, so the chart and grid keep the same list between renders.
+    private List<TrackStats> data = BuildData(allTracks, 0);
+
+    private static List<TrackStats> BuildData(IEnumerable<string> tracks, int boost) => baseline
+        .Where(t => tracks.Contains(t.Track))
+        .Select(t => new TrackStats { Track = t.Track, Seats = t.Seats, Booked = Math.Round(t.Booked * (1 + boost / 100m)) })
+        .ToList();
+
+    // A new series type needs fresh chart options, so re-create the chart.
+    private void OnType(IgbComponentValueChangedEventArgs e)
+    {
+        seriesType = e.Detail switch { "line" => SeriesType.Line, "area" => SeriesType.Area, _ => SeriesType.Bar };
+        options = ChartOptions.Dark<TrackStats>();
+        chartKey++;
+    }
+
+    private async Task ToggleTrack(string track, bool on)
+    {
+        if (on)
+        {
+            tracks.Add(track);
+        }
+        else
+        {
+            tracks.Remove(track);
+        }
+
+        await RefreshChart();
+    }
+
+    private async Task RefreshChart()
+    {
+        data = BuildData(tracks, boost);
+        StateHasChanged();
+        await Task.Yield();
+        if (chart is not null)
+        {
+            await chart.UpdateSeriesAsync(true);
+        }
+    }
+}

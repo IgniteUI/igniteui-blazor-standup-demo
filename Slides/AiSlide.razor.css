@@ -1,0 +1,49 @@
+.ai {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+}
+
+.chat-col {
+    justify-content: stretch;
+}
+
+.chat {
+    height: 100%;
+    max-height: 720px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    --ig-chat-background: var(--surface-2);
+}
+
+.ai-tabs {
+    margin-top: 6px;
+}
+
+.ai-tabs pre {
+    margin-top: 12px;
+}
+
+.ai .points {
+    margin-top: 12px;
+}
+
+.ai code {
+    color: var(--ig-primary-200);
+}
+
+.ai-tabs .component-tags {
+    margin-top: 12px;
+}
+
+.tab-note {
+    margin: 10px 0 0;
+    font-size: 0.9rem;
+}
+
+/* Same shape as the skill tags (app.css .component-tags span), dashed orange for "not yet" */
+.component-tags .soon-tag {
+    border-style: dashed;
+    border-color: rgb(240 90 43 / 0.6);
+    color: var(--ig-secondary-200);
+    background: rgb(240 90 43 / 0.08);
+}

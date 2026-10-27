@@ -1,0 +1,107 @@
+<div class="slide-stack">
+    <header class="slide-head">
+        <div>
+            <span class="kicker">Scenario · Dashboard</span>
+            <h1 class="slide-h">Tile Manager: <span class="accent">drag, resize</span>, save layout</h1>
+        </div>
+        <div class="row toolbar">
+            <IgbButtonGroup Selection="ButtonGroupSelection.SingleRequired" Select="OnDragMode" aria-label="Drag mode">
+                <IgbToggleButton Value="header" Selected="true">Drag by header</IgbToggleButton>
+                <IgbToggleButton Value="tile">Whole tile</IgbToggleButton>
+                <IgbToggleButton Value="none">Locked</IgbToggleButton>
+            </IgbButtonGroup>
+            <IgbButton Variant="ButtonVariant.Outlined" @onclick="SaveLayout">
+                <IgbIcon slot="prefix" IconName="save" Collection="@Icons.Collection" /> Save
+            </IgbButton>
+            <IgbButton Variant="ButtonVariant.Outlined" Disabled="@(savedLayout is null)" @onclick="RestoreLayout">
+                <IgbIcon slot="prefix" IconName="undo" Collection="@Icons.Collection" /> Restore
+            </IgbButton>
+        </div>
+    </header>
+
+    <IgbTileManager dashboard-slide @ref="tiles" class="tiles" ColumnCount="6" Gap="14px" MinRowHeight="clamp(150px, 21vh, 260px)"
+                    DragMode="dragMode" ResizeMode="TileManagerResizeMode.Hover">
+        <IgbTile dashboard-slide ColSpan="2">
+            <span slot="title">Registrations</span>
+            <div class="tile-body">
+                <div class="kpi">
+                    <div>
+                        <div class="kpi-value">@registered.ToString("N0")</div>
+                        <div class="muted">of @capacity.ToString("N0") seats</div>
+                    </div>
+                    <IgbCircularProgress Value="@Math.Round(registered * 100.0 / capacity)" Max="100" class="kpi-ring" />
+                </div>
+                <IgbLinearProgress Value="72" Max="100" Striped="true" Variant="StyleVariant.Success" HideLabel="true" />
+            </div>
+        </IgbTile>
+
+
+        <IgbTile dashboard-slide ColSpan="2" RowSpan="2">
+            <span slot="title">Highlights</span>
+            <IgbCarousel dashboard-slide class="carousel" Interval="4000" HideNavigation="true">
+                @foreach (var (title, text, accent) in highlights)
+                {
+                    <IgbCarouselSlide>
+                        <div class="highlight" style="--accent: @accent">
+                            <h3>@title</h3>
+                            <p>@text</p>
+                        </div>
+                    </IgbCarouselSlide>
+                }
+            </IgbCarousel>
+        </IgbTile>
+        <IgbTile dashboard-slide ColSpan="2" RowSpan="2">
+            <span slot="title">Schedule</span>
+            <IgbCalendar dashboard-slide class="calendar" @bind-Value:get="selectedDay" @bind-Value:set="(DateTime day) => selectedDay = day.ToLocalTime()" ActiveDate="Conference.FirstDay" HideOutsideDays="true" HideHeader="true" />
+        </IgbTile>
+
+
+
+
+        <IgbTile dashboard-slide ColSpan="2">
+            <span slot="title">Top contributors · Grid Lite</span>
+            <div class="mini-grid">
+                <IgbGridLite TItem="Contributor" Data="contributors" class="grid">
+                    <IgbGridLiteColumn Field="@nameof(Contributor.Login)" Header="Login" Sortable />
+                    <IgbGridLiteColumn Field="@nameof(Contributor.Area)" Header="Area" Sortable />
+                    <IgbGridLiteColumn Field="@nameof(Contributor.Commits)" Header="Commits" DataType="GridLiteColumnDataType.Number" Sortable />
+                </IgbGridLite>
+            </div>
+        </IgbTile>
+        <IgbTile dashboard-slide ColSpan="4">
+            <span slot="title">Sessions · @selectedDay.ToString("ddd, MMM d")</span>
+            @if (DaySessions.Count == 0)
+            {
+                <div class="empty muted">No sessions that day. Try Nov 10–12.</div>
+            }
+            else
+            {
+                <IgbList dashboard-slide class="sessions">
+                    @foreach (var s in DaySessions)
+                    {
+                        <IgbListItem>
+                            <IgbAvatar slot="start" Shape="AvatarShape.Circle" Initials="@s.Initials" />
+                            <span slot="title">@s.Title</span>
+                            <span slot="subtitle">@s.Time · @s.Speaker</span>
+                            <div slot="end" class="session-end">
+                                <IgbChip Variant="@TrackVariant(s.Track)">@s.Track</IgbChip>
+                                <div class="seats">
+                                    <IgbLinearProgress dashboard-slide Value="@(s.Booked * 100.0 / s.Seats)" Max="100" HideLabel="true" class="booked"
+                                                       Variant="@(s.Booked >= s.Seats * 0.95 ? StyleVariant.Danger : StyleVariant.Success)" />
+                                    <span class="muted">@(s.Seats - s.Booked) seats left</span>
+                                </div>
+                            </div>
+                        </IgbListItem>
+                    }
+                </IgbList>
+            }
+        </IgbTile>
+        <IgbTile dashboard-slide ColSpan="2">
+            <span slot="title">Bookings by track · ApexCharts</span>
+            <DashboardChartTile />
+        </IgbTile>
+    </IgbTileManager>
+</div>
+
+<IgbToast @ref="savedToast" DisplayTime="1800">Layout saved. Now rearrange some tiles and hit Restore.</IgbToast>
+<IgbToast @ref="restoredToast" DisplayTime="1800">Layout restored</IgbToast>

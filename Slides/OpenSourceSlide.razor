@@ -1,0 +1,85 @@
+<div class="slide-grid">
+    <section class="slide-copy">
+        <span class="kicker">What's in the box</span>
+        <h1 class="slide-h">Open source, <span class="accent">for real</span></h1>
+        <ul class="points">
+            <li><span><b>MIT licensed</b>: free for any project, commercial included</span></li>
+            <li><span><b>@ComponentCatalog.Items.Count components</b> across two NuGet packages, both at 1.0</span></li>
+            <li><span>Built on <b>igniteui-webcomponents</b>, the same components behind our Angular, React and Web Components products</span></li>
+            <li><span>Blazor Web App, WebAssembly and MAUI Hybrid on the <b>supported .NET releases</b>, and trimming-friendly</span></li>
+            <li><span>Developed in the open: issues, roadmap and PRs on GitHub</span></li>
+        </ul>
+
+    </section>
+
+    <section class="slide-demo">
+        <div class="panel explorer">
+            <div class="explorer-head">
+                <IgbInput open-source-slide class="search" Placeholder="Search components…" @bind-Value="query">
+                    <IgbIcon slot="prefix" IconName="search" Collection="@Icons.Collection" />
+                </IgbInput>
+                <div class="count">
+                    <span class="count-num">@Filtered.Count</span>
+                    <span class="muted">of @ComponentCatalog.Items.Count</span>
+                </div>
+            </div>
+
+            <div class="row filters">
+                @foreach (var group in Enum.GetValues<ComponentGroup>())
+                {
+                    var g = group;
+                    <IgbChip Selectable="true" @bind-Selected:get="groups.Contains(g)" @bind-Selected:set="(bool on) => ToggleGroup(g, on)">
+                        @g <IgbBadge slot="end" Variant="StyleVariant.Info">@ComponentCatalog.Items.Count(i => i.Group == g)</IgbBadge>
+                    </IgbChip>
+                }
+                <IgbSwitch @bind-Checked="onlyNew">Recently added</IgbSwitch>
+            </div>
+
+            <IgbHighlight open-source-slide SearchText="@query" class="results">
+                <div class="tiles">
+                    @foreach (var item in Filtered)
+                    {
+                        <div class="tile @item.Group.ToString().ToLowerInvariant()">
+                            <div class="tile-name">
+                                @item.Name
+                                @if (item.IsNew)
+                                {
+                                    <IgbBadge Variant="StyleVariant.Warning">NEW</IgbBadge>
+                                }
+                            </div>
+                            <div class="tile-summary">@item.Summary</div>
+                        </div>
+                    }
+                </div>
+            </IgbHighlight>
+        </div>
+    </section>
+</div>
+
+
+@code {
+    private string query = "";
+    private bool onlyNew;
+    private readonly HashSet<ComponentGroup> groups = [];
+
+    private List<CatalogItem> Filtered => ComponentCatalog.Items
+        .Where(i => groups.Count == 0 || groups.Contains(i.Group))
+        .Where(i => !onlyNew || i.IsNew)
+        .Where(i => query.Length == 0
+                    || i.Name.Contains(query, StringComparison.OrdinalIgnoreCase)
+                    || i.Summary.Contains(query, StringComparison.OrdinalIgnoreCase))
+        .ToList();
+
+    private void ToggleGroup(ComponentGroup group, bool on)
+    {
+        if (on)
+        {
+            groups.Add(group);
+        }
+        else
+        {
+            groups.Remove(group);
+        }
+    }
+
+}

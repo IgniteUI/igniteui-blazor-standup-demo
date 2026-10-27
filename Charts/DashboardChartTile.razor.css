@@ -1,0 +1,5 @@
+.chart-tile {
+    height: 100%;
+    min-height: 0;
+    padding: 0 8px;
+}

@@ -1,0 +1,119 @@
+<div class="slide-stack">
+    <header class="slide-head">
+        <div>
+            <span class="kicker">Scenario · Forms &amp; feedback</span>
+            <h1 class="slide-h">Register for the conference: <span class="accent">every control drives the badge</span></h1>
+        </div>
+        <div class="completeness">
+            <span class="muted">Profile @Completeness%</span>
+            <IgbLinearProgress Value="@Completeness" Max="100" HideLabel="true" Striped="true"
+                               Variant="@(Completeness == 100 ? StyleVariant.Success : StyleVariant.Primary)" />
+        </div>
+    </header>
+
+    <div class="forms-body">
+        <EditForm forms-slide Model="model" OnValidSubmit="Submit" class="panel form" @onreset="Reset">
+            <DataAnnotationsValidator />
+            <IgbInput Label="Full name" @bind-Value="model.Name" Required="true">
+                <IgbIcon slot="prefix" IconName="person" Collection="@Icons.Collection" />
+            </IgbInput>
+            <IgbInput Label="Email" DisplayType="InputType.Email" @bind-Value="model.Email" Required>
+                <IgbIcon slot="prefix" IconName="mail" Collection="@Icons.Collection" />
+            </IgbInput>
+
+            <IgbMaskInput Label="Phone" Mask="+(999) 999-999-999" Placeholder="+(___) ___-___-___" @bind-Value="model.Phone">
+                <IgbIcon slot="prefix" IconName="phone" Collection="@Icons.Collection" />
+            </IgbMaskInput>
+            <IgbSelect Label="Track" @bind-Value="model.Track">
+                @foreach (var (value, label) in Registration.Tracks)
+                {
+                    <IgbSelectItem Value="@value">@label</IgbSelectItem>
+                }
+            </IgbSelect>
+
+            <IgbCombo forms-slide class="span-2" Label="Topics" Placeholder="Pick what you're into"
+                      Data="Registration.AllTopics" ValueKey="Id" DisplayKey="Name" GroupKey="Area"
+                      ItemTemplateScript="TopicItem" GroupHeaderTemplateScript="TopicGroup"
+                      @bind-Value="model.Topics" />
+
+            <IgbDatePicker Label="Conference day" @bind-Value:get="model.Day" @bind-Value:set="(DateTime? day) => model.Day = day?.ToLocalTime()" Min="@minDay" Max="@maxDay" />
+            <IgbColorPicker forms-slide Label="Badge color" @bind-Value="model.BadgeColor" Swatches="badgeSwatches" />
+
+            <div class="field span-2">
+                <label>Ticket</label>
+                <IgbRadioGroup Name="tier" Alignment="ContentOrientation.Horizontal" @bind-Value="model.Tier">
+                    <IgbRadio Value="TicketTier.Community">Community</IgbRadio>
+                    <IgbRadio Value="TicketTier.Pro">Pro</IgbRadio>
+                    <IgbRadio Value="TicketTier.Speaker">Speaker</IgbRadio>
+                </IgbRadioGroup>
+            </div>
+
+            <div class="field">
+                <label>Team size: <b>@model.TeamSize</b></label>
+                <IgbSlider @bind-Value="model.TeamSize" Min="1" Max="50" Step="1" />
+            </div>
+            <div class="field">
+                <label>Blazor experience</label>
+                <IgbRating @bind-Value="model.Experience" Max="5" AllowReset="true" />
+            </div>
+
+            <div class="field span-2 toggles">
+                <IgbSwitch @bind-Checked="model.Newsletter">Send me release notes</IgbSwitch>
+                <IgbCheckbox @bind-Checked="model.Agree" Required="true">I agree to the code of conduct</IgbCheckbox>
+                <span class="spacer"></span>
+                <IgbButton Variant="ButtonVariant.Flat" DisplayType="ButtonBaseType.Reset">Reset</IgbButton>
+                <IgbButton Variant="ButtonVariant.Contained" DisplayType="ButtonBaseType.Submit">Register</IgbButton>
+            </div>
+        </EditForm>
+
+        <section class="badge-col">
+            <IgbCard forms-slide class="badge" style="@BadgeStyle">
+                <div class="badge-strip">
+                    <span>.NET Community Conf 2026</span>
+                    <IgbBadge Variant="@TierVariant">@model.Tier.ToString().ToUpperInvariant()</IgbBadge>
+                </div>
+                <IgbCardHeader>
+                    <IgbAvatar forms-slide slot="thumbnail" Shape="AvatarShape.Circle" Initials="@Initials" class="badge-avatar" />
+                    <h3 slot="title">@(string.IsNullOrWhiteSpace(model.Name) ? "Your name" : model.Name)</h3>
+                    <h5 slot="subtitle">@TrackLabel</h5>
+                </IgbCardHeader>
+                <IgbCardContent>
+                    <div class="badge-meta">
+                        <span><IgbIcon IconName="event" Collection="@Icons.Collection" /> @(model.Day?.ToString("ddd, MMM d") ?? "Pick a day")</span>
+                        <span><IgbIcon IconName="group" Collection="@Icons.Collection" /> Team of @model.TeamSize</span>
+                        <IgbRating forms-slide Value="@model.Experience" Max="5" ReadOnly="true" class="mini-rating" />
+                    </div>
+                    <div class="row badge-topics">
+                        @foreach (var topic in SelectedTopics)
+                        {
+                            <IgbChip Removable="true" Remove="@(() => RemoveTopic(topic.Id))">@topic.Emoji @topic.Name</IgbChip>
+                        }
+                    </div>
+                    <div class="badge-qr">
+                        <IgbQrCode forms-slide Value="@VCard" Size="132" DotStyle="QrDotStyle.Rounded" />
+                        <small class="muted">Live vCard: it re-encodes as you fill in the form</small>
+                    </div>
+                </IgbCardContent>
+            </IgbCard>
+            <div class="component-tags">
+                <span>Input</span><span>MaskInput</span><span>Select</span><span>Combo</span><span>DatePicker</span>
+                <span>ColorPicker</span><span>RadioGroup</span><span>Slider</span><span>Rating</span><span>Switch</span>
+                <span>Checkbox</span><span>Card</span><span>Avatar</span><span>Chip</span><span>QrCode</span>
+                <span>Dialog</span><span>Snackbar</span>
+            </div>
+        </section>
+    </div>
+</div>
+
+<IgbDialog @ref="dialog" id="confirm-dialog" Title="Confirm registration" HideDefaultAction="true" CloseOnOutsideClick="true">
+    <p>
+        <b>@model.Name</b> · @model.Tier ticket · @TrackLabel<br />
+        @(model.Day?.ToString("dddd, MMMM d")) · @SelectedTopics.Count topic(s)
+    </p>
+    <IgbButton slot="footer" Variant="ButtonVariant.Flat" Command="--hide" Commandfor="confirm-dialog">Edit</IgbButton>
+    <IgbButton slot="footer" Variant="ButtonVariant.Contained" @onclick="Confirm">Confirm</IgbButton>
+</IgbDialog>
+
+<IgbSnackbar @ref="snackbar" DisplayTime="5000" ActionText="Undo" Action="Undo">
+    🎉 You're registered, see you there!
+</IgbSnackbar>

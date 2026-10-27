@@ -1,0 +1,84 @@
+.explorer {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    /* fixed height: the panel must not resize (and re-center the slide) as the result count changes */
+    height: min(100%, 760px);
+    min-height: 0;
+}
+
+.explorer-head {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.search {
+    flex: 1;
+}
+
+.count {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.count-num {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--brand-orange);
+    font-variant-numeric: tabular-nums;
+}
+
+.filters {
+    gap: 8px;
+}
+
+.results {
+    display: block;
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    padding-right: 4px;
+}
+
+.tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 10px;
+}
+
+.tile {
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgb(255 255 255 / 0.04);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--tile-accent, var(--brand-blue));
+    animation: pop 220ms ease-out;
+}
+
+.tile.inputs { --tile-accent: #0099FF; }
+.tile.layout { --tile-accent: #F05A2B; }
+.tile.display { --tile-accent: #7ee2b8; }
+.tile.feedback { --tile-accent: #c49bff; }
+.tile.grid { --tile-accent: #ffd166; }
+
+.tile-name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    font-weight: 700;
+}
+
+.tile-summary {
+    margin-top: 2px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.35;
+}
+
+@keyframes pop {
+    from { opacity: 0; transform: scale(0.97); }
+}

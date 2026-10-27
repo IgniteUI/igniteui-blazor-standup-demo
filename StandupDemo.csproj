@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
+    <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+  </PropertyGroup>
+
+  <!-- `dotnet run -c Release` runs the runtime without debugging too, like the published app. -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <WasmDebugLevel>0</WasmDebugLevel>
+  </PropertyGroup>
+
+  <!-- Fixed CSS isolation scopes. Ignite UI components a page styles carry its scope as an attribute
+       (e.g. <IgbCard grid-lite-slide>), so their selectors need no ::deep. -->
+  <ItemGroup>
+    <None Update="Pages/Deck.razor.css" CssScope="deck" />
+    <None Update="Slides/TitleSlide.razor.css" CssScope="title-slide" />
+    <None Update="Slides/OpenSourceSlide.razor.css" CssScope="open-source-slide" />
+    <None Update="Slides/FormsSlide.razor.css" CssScope="forms-slide" />
+    <None Update="Slides/GettingStartedSlide.razor.css" CssScope="getting-started-slide" />
+    <None Update="Slides/GridLiteSlide.razor.css" CssScope="grid-lite-slide" />
+    <None Update="Charts/ChartsSlide.razor.css" CssScope="charts-slide" />
+    <None Update="Charts/DashboardChartTile.razor.css" CssScope="chart-tile" />
+    <None Update="Slides/DashboardSlide.razor.css" CssScope="dashboard-slide" />
+    <None Update="Slides/ThemingSlide.razor.css" CssScope="theming-slide" />
+    <None Update="Slides/AiSlide.razor.css" CssScope="ai-slide" />
+    <None Update="Slides/ThanksSlide.razor.css" CssScope="thanks-slide" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IgniteUI.Blazor.Lite" Version="1.0.0" />
+    <PackageReference Include="IgniteUI.Blazor.GridLite" Version="1.0.0" />
+    <PackageReference Include="Blazor-ApexCharts" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.8" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

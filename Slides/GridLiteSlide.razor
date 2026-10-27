@@ -1,0 +1,111 @@
+<div class="slide-stack">
+    <header class="slide-head">
+        <div>
+            <span class="kicker">IgniteUI.Blazor.GridLite · MIT</span>
+            <h1 class="slide-h">Grid Lite: <span class="accent">@people.Count.ToString("N0") rows</span>, virtualized</h1>
+        </div>
+        <div class="stats">
+            <div><span class="stat">@matchCount.ToString("N0")</span><span class="muted">matching</span></div>
+            <IgbCircularProgress Value="@(matchCount * 100.0 / people.Count)" Max="100" HideLabel="true" class="ratio" />
+        </div>
+    </header>
+
+    <div class="grid-body">
+        <aside class="panel controls">
+            <div class="panel-title"><IgbIcon IconName="search" Collection="@Icons.Collection" /> Bound to the grid's filters</div>
+
+            <IgbInput Label="Name contains" Placeholder="e.g. Petrov" @bind-Value:get="SearchText" @bind-Value:set="SetSearch">
+                <IgbIcon slot="prefix" IconName="search" Collection="@Icons.Collection" />
+            </IgbInput>
+
+            <div class="field">
+                <label>Salary: <b>@Money(SalaryLow)</b> to <b>@Money(SalaryHigh)</b></label>
+                @* The range is bound once the grid has its data, by which time Max and Step are in place *@
+                <IgbRangeSlider Max="SalaryMax" Step="5000" Min="@(loading ? 0 : SalaryMin)"
+                                Lower="@(loading ? 0 : SalaryLow)" Upper="@(loading ? 0 : SalaryHigh)" Change="OnSalary" />
+            </div>
+
+            <div class="field">
+                <label>Departments</label>
+                <div class="row chips">
+                    @foreach (var d in departments)
+                    {
+                        var dept = d;
+                        <IgbChip Selectable="true" @bind-Selected:get="IsDeptSelected(dept)" @bind-Selected:set="(bool on) => ToggleDept(dept, on)">@dept</IgbChip>
+                    }
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Columns</label>
+                <div class="row chips">
+                    @foreach (var c in optionalColumns)
+                    {
+                        var col = c;
+                        <IgbChip Selectable="true" @bind-Selected:get="!hidden.Contains(col)" @bind-Selected:set="(bool on) => ToggleColumn(col, on)">@col</IgbChip>
+                    }
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Sorting · Density</label>
+                <div class="row">
+                    <IgbButtonGroup Selection="ButtonGroupSelection.SingleRequired" Select="OnSortMode">
+                        <IgbToggleButton Value="single" Selected="true">Single</IgbToggleButton>
+                        <IgbToggleButton Value="multiple">Multi</IgbToggleButton>
+                    </IgbButtonGroup>
+                    <IgbButtonGroup Selection="ButtonGroupSelection.SingleRequired" Select="OnDensity">
+                        <IgbToggleButton Value="1">S</IgbToggleButton>
+                        <IgbToggleButton Value="2" Selected="true">M</IgbToggleButton>
+                        <IgbToggleButton Value="3">L</IgbToggleButton>
+                    </IgbButtonGroup>
+                </div>
+            </div>
+
+            <div class="row">
+                <IgbButton Variant="ButtonVariant.Outlined" @onclick="SortBySalary">Top earners</IgbButton>
+                <IgbButton Variant="ButtonVariant.Flat" @onclick="ResetAll">
+                    <IgbIcon slot="prefix" IconName="refresh" Collection="@Icons.Collection" /> Reset
+                </IgbButton>
+            </div>
+        </aside>
+
+        <IgbCard grid-lite-slide class="grid-card" data-size="@density">
+            @if (loading)
+            {
+                <div class="grid-loading">
+                    <IgbLinearProgress Indeterminate="true" />
+                    <span class="muted">Loading @people.Count.ToString("N0") rows…</span>
+                </div>
+            }
+            <IgbGridLite grid-lite-slide TItem="Employee" Data="gridData" SortingOptions="sortingOptions" class="grid"
+                         FilterExpressions="filters" SortingExpressions="sorting" Filtered="OnFiltered" Sorted="OnSorted"
+                         Rendered="OnGridRendered">
+                <IgbGridLiteColumn Field="@nameof(Employee.Id)" Header="#" DataType="GridLiteColumnDataType.Number" Width="90px" Sortable />
+                <IgbGridLiteColumn Field="@nameof(Employee.Name)" Header="Name" Sortable Filterable Resizable />
+                @if (!hidden.Contains("Title"))
+                {
+                    <IgbGridLiteColumn Field="@nameof(Employee.Title)" Header="Title" Sortable Filterable Resizable />
+                }
+                <IgbGridLiteColumn Field="@nameof(Employee.Department)" Header="Department" Sortable Filterable Resizable />
+                @if (!hidden.Contains("Country"))
+                {
+                    <IgbGridLiteColumn Field="@nameof(Employee.Country)" Header="Country" Sortable Filterable Resizable />
+                }
+                <IgbGridLiteColumn Field="@nameof(Employee.Salary)" Header="Salary" DataType="GridLiteColumnDataType.Number" Sortable Filterable />
+                @if (!hidden.Contains("Rating"))
+                {
+                    <IgbGridLiteColumn Field="@nameof(Employee.Rating)" Header="Rating" DataType="GridLiteColumnDataType.Number" Sortable Filterable />
+                }
+                @if (!hidden.Contains("Remote"))
+                {
+                    <IgbGridLiteColumn Field="@nameof(Employee.Remote)" Header="Remote" DataType="GridLiteColumnDataType.Boolean" Sortable Filterable />
+                }
+                @if (!hidden.Contains("Hired"))
+                {
+                    <IgbGridLiteColumn Field="@nameof(Employee.Hired)" Header="Hired" Sortable />
+                }
+            </IgbGridLite>
+        </IgbCard>
+    </div>
+</div>

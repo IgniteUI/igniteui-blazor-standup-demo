@@ -1,0 +1,8 @@
+[Bb]in/
+[Oo]bj/
+[Rr]elease/
+publish/
+.vs/
+*.user
+*.binlog
+.DS_Store

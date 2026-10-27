@@ -1,0 +1,158 @@
+<div class="slide-stack">
+    <header class="slide-head">
+        <div>
+            <span class="kicker">Scenario · Layout &amp; navigation</span>
+            <h1 class="slide-h">From <span class="blue">dotnet new</span> to components <span class="accent">in four steps</span></h1>
+        </div>
+        <div class="component-tags">
+            <span>Splitter</span><span>Tree</span><span>Breadcrumbs</span><span>Stepper</span><span>Tabs</span><span>ButtonGroup</span><span>Theme Provider</span>
+        </div>
+    </header>
+
+    <IgbSplitter getting-started-slide class="workspace" StartSize="24%" StartMinSize="180px" StartMaxSize="40%">
+        <div slot="start" class="pane explorer-pane">
+            <div class="panel-title"><IgbIcon IconName="folder" Collection="@Icons.Collection" /> Solution</div>
+            <IgbTree ToggleNodeOnClick="true">
+                <IgbTreeItem Label="MyApp" Expanded="true">
+                    @foreach (var file in files.Where(f => f.Folder is null))
+                    {
+                        var f = file;
+                        <IgbTreeItem Label="@f.Name" Active="@(step == f.Step)" @onclick="() => GoTo(f.Step)" />
+                    }
+                    <IgbTreeItem Label="wwwroot" Expanded="true">
+                        @foreach (var file in files.Where(f => f.Folder == "wwwroot"))
+                        {
+                            var f = file;
+                            <IgbTreeItem Label="@f.Name" Active="@(step == f.Step)" @onclick="() => GoTo(f.Step)" />
+                        }
+                    </IgbTreeItem>
+                    <IgbTreeItem Label="Pages" Expanded="true">
+                        @foreach (var file in files.Where(f => f.Folder == "Pages"))
+                        {
+                            var f = file;
+                            <IgbTreeItem Label="@f.Name" Active="@(step == f.Step)" @onclick="() => GoTo(f.Step)" />
+                        }
+                    </IgbTreeItem>
+                </IgbTreeItem>
+            </IgbTree>
+        </div>
+
+        <div slot="end" class="pane content-pane">
+            <nav aria-label="File path">
+                <IgbBreadcrumbs Separator="chevron_right">
+                    <IgbBreadcrumb><span>MyApp</span></IgbBreadcrumb>
+                    @if (CurrentFile.Folder is { } folder)
+                    {
+                        <IgbBreadcrumb><span>@folder</span></IgbBreadcrumb>
+                    }
+                    <IgbBreadcrumb Current="true"><span>@CurrentFile.Name</span></IgbBreadcrumb>
+                </IgbBreadcrumbs>
+            </nav>
+
+            <IgbStepper getting-started-slide @ref="stepper" Linear="false" ActiveStepChanged="OnStepChanged" class="steps">
+                <IgbStep Active="@(step == 0)" Complete="@(step > 0)">
+                    <span slot="title">Install</span>
+                    <span slot="subtitle">NuGet</span>
+                    <div class="step-body">
+                        <pre class="code"><span class="k">dotnet add package</span> IgniteUI.Blazor.Lite
+<span class="k">dotnet add package</span> IgniteUI.Blazor.GridLite </pre>
+                        <p class="muted">Two MIT packages on NuGet.org, targeting the supported .NET releases.</p>
+                        <div class="shortcut now">
+                            <div class="shortcut-head">
+                                <IgbBadge Variant="StyleVariant.Success">AVAILABLE NOW</IgbBadge>
+                                <b>Let your agent set it up</b>
+                                <span class="muted"><a href="https://github.com/dotnet/skills" target="_blank" rel="noopener">dotnet/skills</a> · dotnet-blazor plugin · use-igniteui-blazor · Copilot CLI / Claude Code</span>
+                            </div>
+                            <pre class="code"><span class="k">/plugin marketplace add</span> dotnet/skills
+<span class="k">/plugin install</span> dotnet-blazor@dotnet-agent-skills</pre>
+                        </div>
+                        <div class="shortcut soon">
+                            <div class="shortcut-head">
+                                <IgbBadge Variant="StyleVariant.Warning">COMING SOON</IgbBadge>
+                                <b>Steps 1–3 in one command</b>
+                                <span class="muted">dotnet scaffold · dotnet/Scaffolding#3823</span>
+                            </div>
+                            <pre class="code"><span class="k">dotnet scaffold aspnet</span> blazor-igniteui --project ./MyBlazorApp/MyBlazorApp.csproj</pre>
+                        </div>
+                    </div>
+                </IgbStep>
+
+                <IgbStep Active="@(step == 1)" Complete="@(step > 1)">
+                    <span slot="title">Register</span>
+                    <span slot="subtitle">Program.cs</span>
+                    <div class="step-body">
+                        <IgbTabs Alignment="TabsAlignment.Start">
+                            <IgbTab Label="Blazor Web App" Selected="true">
+                                <pre class="code"><span class="c">// both the server and the .Client Program.cs</span>
+builder.Services.<span class="t">AddIgniteUIBlazor</span>();
+<span class="c">// optional: preload modules so they're ready at startup</span>
+builder.Services.<span class="t">AddIgniteUIBlazor</span>(<span class="k">typeof</span>(IgbComboModule), <span class="k">typeof</span>(IgbDialogModule));</pre>
+                            </IgbTab>
+                            <IgbTab Label="WebAssembly">
+                                <pre class="code"><span class="k">var</span> builder = WebAssemblyHostBuilder.CreateDefault(args);
+builder.Services.<span class="t">AddIgniteUIBlazor</span>();</pre>
+                            </IgbTab>
+                            <IgbTab Label="MAUI Blazor Hybrid">
+                                <pre class="code"><span class="c">// MauiProgram.cs; the theme goes in wwwroot/index.html</span>
+<span class="k">var</span> builder = MauiApp.CreateBuilder();
+builder.Services.<span class="t">AddMauiBlazorWebView</span>();
+builder.Services.<span class="t">AddIgniteUIBlazor</span>();</pre>
+                            </IgbTab>
+                        </IgbTabs>
+                    </div>
+                </IgbStep>
+
+                <IgbStep Active="@(step == 2)" Complete="@(step > 2)">
+                    <span slot="title">Theme</span>
+                    <span slot="subtitle">index.html</span>
+                    <div class="step-body theme-step">
+                        <div class="row">
+                            <IgbButtonGroup Selection="ButtonGroupSelection.SingleRequired" Select="OnThemePicked">
+                                @foreach (var t in themes)
+                                {
+                                    <IgbToggleButton Value="@t" Selected="@(t == theme)">@t</IgbToggleButton>
+                                }
+                            </IgbButtonGroup>
+                            <IgbSwitch @bind-Checked="dark">Dark</IgbSwitch>
+                        </div>
+                        <pre class="code">&lt;<span class="t">link</span> href=<span class="s">"_content/IgniteUI.Blazor/themes/@(dark ? "dark" : "light")/@(theme.ToLowerInvariant()).css"</span> rel=<span class="s">"stylesheet"</span> /&gt;</pre>
+                        <IgbThemeProvider Theme="@ThemeEnum" Variant="@(dark ? ThemeVariant.Dark : ThemeVariant.Light)">
+                            <div class="theme-preview theme-showcase" data-theme="@theme.ToLowerInvariant()" data-variant="@(dark ? "dark" : "light")">
+                                <div class="row">
+                                    <IgbButton Variant="ButtonVariant.Contained">Contained</IgbButton>
+                                    <IgbButton Variant="ButtonVariant.Outlined">Outlined</IgbButton>
+                                    <IgbChip Selectable="true" Selected="true">Chip</IgbChip>
+                                    <IgbCheckbox Checked="true">Checkbox</IgbCheckbox>
+                                    <IgbSwitch Checked="true">Switch</IgbSwitch>
+                                </div>
+                                <IgbInput Label="Input" Value="@theme" />
+                            </div>
+                        </IgbThemeProvider>
+                    </div>
+                </IgbStep>
+
+                <IgbStep Active="@(step == 3)">
+                    <span slot="title">Use</span>
+                    <span slot="subtitle">Home.razor</span>
+                    <div class="step-body use-step">
+                        <pre class="code"><span class="c">@@* _Imports.razor: @@using IgniteUI.Blazor.Controls *@@</span>
+&lt;<span class="t">IgbRating</span> @@bind-Value=<span class="s">"stars"</span> /&gt;
+&lt;<span class="t">IgbButton</span> @@onclick=<span class="s">"() => stars = 5"</span>&gt;Love it&lt;/<span class="t">IgbButton</span>&gt;
+&lt;<span class="t">IgbCircularProgress</span> Value=<span class="s">"@@(stars * 20)"</span> /&gt;</pre>
+                        <div class="live">
+                            <span class="kicker">Live</span>
+                            <IgbRating @bind-Value="stars" Max="5" />
+                            <IgbButton @onclick="() => stars = 5">Love it</IgbButton>
+                            <IgbCircularProgress Value="@(stars * 20)" Max="100" />
+                        </div>
+                    </div>
+                </IgbStep>
+            </IgbStepper>
+
+            <div class="row step-nav">
+                <IgbButton Variant="ButtonVariant.Outlined" Disabled="@(step == 0)" @onclick="() => GoTo(step - 1)">Back</IgbButton>
+                <IgbButton Variant="ButtonVariant.Contained" Disabled="@(step == 3)" @onclick="() => GoTo(step + 1)">Next step</IgbButton>
+            </div>
+        </div>
+    </IgbSplitter>
+</div>

@@ -1,0 +1,126 @@
+<div class="slide-grid wide-demo theming">
+    <section class="slide-copy">
+        <span class="kicker">Theming</span>
+        <h1 class="slide-h">Theming is just <span class="accent">CSS</span></h1>
+
+        <div class="panel lab-controls">
+            <div class="field">
+                <label>Design system · Theme Provider</label>
+                <IgbButtonGroup theming-slide Selection="ButtonGroupSelection.SingleRequired" Select="OnTheme">
+                    @foreach (var t in Enum.GetValues<Theme>())
+                    {
+                        <IgbToggleButton theming-slide Value="@t.ToString()" Selected="@(t == theme)">@t</IgbToggleButton>
+                    }
+                </IgbButtonGroup>
+            </div>
+
+            <div class="field">
+                <label>Palette</label>
+                <div class="row palettes">
+                    @foreach (var p in palettes)
+                    {
+                        var preset = p;
+                        <IgbChip Selectable="true" @bind-Selected:get="palette == preset.Key" @bind-Selected:set="(bool on) => PickPalette(preset.Key, on)">
+                            <span slot="start" class="swatch" style="--a: @preset.Primary; --b: @preset.Secondary"></span>
+                            @preset.Label
+                        </IgbChip>
+                    }
+                </div>
+            </div>
+
+            @if (palette == "custom")
+            {
+                <div class="row pickers">
+                    <IgbColorPicker Label="Primary" @bind-Value="primary" Swatches="swatches" />
+                    <IgbColorPicker Label="Secondary" @bind-Value="secondary" Swatches="swatches" />
+                </div>
+            }
+
+            <div class="field">
+                <IgbSwitch @bind-Checked="overrideLayout">Override roundness, spacing &amp; size</IgbSwitch>
+            </div>
+            <div class="field">
+                <label>Roundness <code>--ig-radius-factor: @(overrideLayout ? roundness.ToString("0.0", inv) : "theme default")</code></label>
+                <IgbSlider TValue="double" @bind-Value="roundness" Min="0" Max="1" Step="0.1" Disabled="@(!overrideLayout)" />
+            </div>
+            <div class="field">
+                <label>Spacing <code>--ig-spacing: @(overrideLayout ? spacing.ToString("0.00", inv) : "theme default")</code></label>
+                <IgbSlider TValue="double" @bind-Value="spacing" Min="0.5" Max="1.5" Step="0.25" Disabled="@(!overrideLayout)" />
+            </div>
+            <div class="field">
+                <label>Size <code>--ig-size: @(overrideLayout ? size.ToString(inv) : "theme default")</code></label>
+                <IgbButtonGroup theming-slide Selection="ButtonGroupSelection.SingleRequired" Select="OnSize" Disabled="@(!overrideLayout)">
+                    <IgbToggleButton theming-slide Value="1" Selected="@(size == 1)">Small</IgbToggleButton>
+                    <IgbToggleButton theming-slide Value="2" Selected="@(size == 2)">Medium</IgbToggleButton>
+                    <IgbToggleButton theming-slide Value="3" Selected="@(size == 3)">Large</IgbToggleButton>
+                </IgbButtonGroup>
+            </div>
+            <IgbButton Variant="ButtonVariant.Flat" @onclick="Reset">
+                <IgbIcon slot="prefix" IconName="refresh" Collection="@Icons.Collection" /> Reset
+            </IgbButton>
+        </div>
+    </section>
+
+    <section class="slide-demo">
+        <IgbThemeProvider Theme="theme" Variant="ThemeVariant.Dark">
+            @* theme-showcase: no deck-level tweaks in here, so the themes show their own defaults *@
+            <div class="theme-lab theme-showcase" data-theme="@theme.ToString().ToLowerInvariant()" data-palette="@palette" style="@LabStyle">
+                <IgbCard theming-slide class="preview-card">
+                    <IgbCardHeader>
+                        <IgbAvatar slot="thumbnail" Shape="AvatarShape.Rounded" Initials="IG" />
+                        <h3 slot="title">@theme · @PaletteLabel</h3>
+                        <h5 slot="subtitle">Scoped with IgbThemeProvider</h5>
+                    </IgbCardHeader>
+                    <IgbCardContent>
+                        <IgbTabs>
+                            <IgbTab Label="Controls" Selected="true">
+                                <div class="preview-grid">
+                                    <IgbInput Label="Project" Value="Standup demo" />
+                                    <IgbSelect TValue="string" Label="Framework" Value="@("blazor")">
+                                        <IgbSelectItem Value="@("blazor")">Blazor</IgbSelectItem>
+                                        <IgbSelectItem Value="@("angular")">Angular</IgbSelectItem>
+                                        <IgbSelectItem Value="@("react")">React</IgbSelectItem>
+                                    </IgbSelect>
+                                    <div class="row">
+                                        <IgbSwitch Checked="true">Dark</IgbSwitch>
+                                        <IgbCheckbox Checked="true">MIT</IgbCheckbox>
+                                        <IgbRadioGroup TValue="string" Name="lab" Value="@("on")" Alignment="ContentOrientation.Horizontal">
+                                            <IgbRadio Value="@("on")">On</IgbRadio>
+                                            <IgbRadio Value="@("off")">Off</IgbRadio>
+                                        </IgbRadioGroup>
+                                    </div>
+                                    <IgbSlider TValue="double" Value="60" />
+                                    <div class="row">
+                                        <IgbChip Selectable="true" Selected="true">Selected</IgbChip>
+                                        <IgbChip Removable="true">Removable</IgbChip>
+                                        <IgbBadge Variant="StyleVariant.Primary">7</IgbBadge>
+                                        <IgbRating Value="4" Max="5" />
+                                    </div>
+                                    <IgbLinearProgress Value="64" Max="100" Striped="true" />
+                                </div>
+                            </IgbTab>
+                            <IgbTab Label="Calendar">
+                                <IgbCalendar theming-slide TValue="DateTime?" Value="@labDate" class="lab-calendar" />
+                            </IgbTab>
+                            <IgbTab Label="List">
+                                <IgbList>
+                                    <IgbListItem><IgbAvatar slot="start" Initials="A" /><span slot="title">Accordion</span><span slot="subtitle">Layout</span></IgbListItem>
+                                    <IgbListItem><IgbAvatar slot="start" Initials="B" /><span slot="title">Badge</span><span slot="subtitle">Display</span></IgbListItem>
+                                    <IgbListItem><IgbAvatar slot="start" Initials="C" /><span slot="title">Combo</span><span slot="subtitle">Inputs</span></IgbListItem>
+                                </IgbList>
+                            </IgbTab>
+                        </IgbTabs>
+                    </IgbCardContent>
+                    <IgbCardActions>
+                        <IgbButton slot="start" Variant="ButtonVariant.Flat">Flat</IgbButton>
+                        <IgbButton slot="start" Variant="ButtonVariant.Outlined">Outlined</IgbButton>
+                        <IgbButton slot="end" Variant="ButtonVariant.Contained">Contained</IgbButton>
+                        <IgbIconButton slot="end" IconName="favorite" Collection="@Icons.Collection" Variant="IconButtonVariant.Contained" />
+                    </IgbCardActions>
+                </IgbCard>
+            </div>
+        </IgbThemeProvider>
+
+        <pre class="code generated">@GeneratedCss</pre>
+    </section>
+</div>

@@ -1,0 +1,13 @@
+@namespace StandupDemo.Charts
+@using global::ApexCharts
+
+<div class="chart-tile">
+    <ApexChart TItem="TrackStats" Options="options" Height="@("165")">
+        <ApexPointSeries TItem="TrackStats" Items="TrackStats.All" Name="Booked" SeriesType="SeriesType.Bar"
+                         XValue="t => t.Track" YValue="t => t.Booked" />
+    </ApexChart>
+</div>
+
+@code {
+    private readonly ApexChartOptions<TrackStats> options = ChartOptions.Dark<TrackStats>();
+}

@@ -1,0 +1,136 @@
+.theming {
+    grid-template-columns: minmax(380px, 0.7fr) minmax(0, 2fr);
+}
+
+.theming .slide-demo {
+    justify-content: flex-start;
+}
+
+.theming .slide-h {
+    font-size: clamp(1.8rem, 2.6vw, 2.8rem);
+}
+
+/* Deck chrome, not part of the showcase: compact so the whole panel fits */
+.lab-controls {
+    --ig-size: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.lab-controls igc-button-group {
+    width: 100%;
+}
+
+.lab-controls igc-toggle-button {
+    flex: 1;
+}
+
+.field code {
+    color: var(--ig-primary-200);
+    margin-left: 6px;
+}
+
+.pickers {
+    gap: 24px;
+}
+
+/* Preview surface: paint the active palette's surface so presets show their full look */
+.theme-lab {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+    padding: 14px;
+    border-radius: 20px;
+    background: var(--ig-surface-500);
+    transition: background-color 200ms;
+}
+
+.palettes {
+    gap: 6px;
+}
+
+.swatch {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--a) 50%, var(--b) 50%);
+}
+
+/*
+  Custom palette: re-derive the primary/secondary ramps from two seed colors with color-mix.
+  The -contrast tokens are recomputed here too, since custom properties resolve where they are declared.
+*/
+.theme-lab[data-palette="custom"] {
+    --ig-primary-50: color-mix(in oklab, var(--seed-primary) 12%, white);
+    --ig-primary-100: color-mix(in oklab, var(--seed-primary) 30%, white);
+    --ig-primary-200: color-mix(in oklab, var(--seed-primary) 50%, white);
+    --ig-primary-300: color-mix(in oklab, var(--seed-primary) 70%, white);
+    --ig-primary-400: color-mix(in oklab, var(--seed-primary) 85%, white);
+    --ig-primary-500: var(--seed-primary);
+    --ig-primary-600: color-mix(in oklab, var(--seed-primary) 88%, black);
+    --ig-primary-700: color-mix(in oklab, var(--seed-primary) 75%, black);
+    --ig-primary-800: color-mix(in oklab, var(--seed-primary) 60%, black);
+    --ig-primary-900: color-mix(in oklab, var(--seed-primary) 45%, black);
+    --ig-primary-A100: color-mix(in oklab, var(--seed-primary) 40%, white);
+    --ig-primary-A200: color-mix(in oklab, var(--seed-primary) 75%, white);
+    --ig-primary-A400: color-mix(in oklab, var(--seed-primary) 92%, black);
+    --ig-primary-A700: color-mix(in oklab, var(--seed-primary) 78%, black);
+
+    --ig-secondary-50: color-mix(in oklab, var(--seed-secondary) 12%, white);
+    --ig-secondary-100: color-mix(in oklab, var(--seed-secondary) 30%, white);
+    --ig-secondary-200: color-mix(in oklab, var(--seed-secondary) 50%, white);
+    --ig-secondary-300: color-mix(in oklab, var(--seed-secondary) 70%, white);
+    --ig-secondary-400: color-mix(in oklab, var(--seed-secondary) 85%, white);
+    --ig-secondary-500: var(--seed-secondary);
+    --ig-secondary-600: color-mix(in oklab, var(--seed-secondary) 88%, black);
+    --ig-secondary-700: color-mix(in oklab, var(--seed-secondary) 75%, black);
+    --ig-secondary-800: color-mix(in oklab, var(--seed-secondary) 60%, black);
+    --ig-secondary-900: color-mix(in oklab, var(--seed-secondary) 45%, black);
+    --ig-secondary-A100: color-mix(in oklab, var(--seed-secondary) 40%, white);
+    --ig-secondary-A200: color-mix(in oklab, var(--seed-secondary) 75%, white);
+    --ig-secondary-A400: color-mix(in oklab, var(--seed-secondary) 92%, black);
+    --ig-secondary-A700: color-mix(in oklab, var(--seed-secondary) 78%, black);
+
+    --ig-primary-50-contrast: hsla(from color(from var(--ig-primary-50) var(--y-contrast)) h 0 l/1);
+    --ig-primary-100-contrast: hsla(from color(from var(--ig-primary-100) var(--y-contrast)) h 0 l/1);
+    --ig-primary-200-contrast: hsla(from color(from var(--ig-primary-200) var(--y-contrast)) h 0 l/1);
+    --ig-primary-300-contrast: hsla(from color(from var(--ig-primary-300) var(--y-contrast)) h 0 l/1);
+    --ig-primary-400-contrast: hsla(from color(from var(--ig-primary-400) var(--y-contrast)) h 0 l/1);
+    --ig-primary-500-contrast: hsla(from color(from var(--ig-primary-500) var(--y-contrast)) h 0 l/1);
+    --ig-primary-600-contrast: hsla(from color(from var(--ig-primary-600) var(--y-contrast)) h 0 l/1);
+    --ig-primary-700-contrast: hsla(from color(from var(--ig-primary-700) var(--y-contrast)) h 0 l/1);
+    --ig-primary-800-contrast: hsla(from color(from var(--ig-primary-800) var(--y-contrast)) h 0 l/1);
+    --ig-primary-900-contrast: hsla(from color(from var(--ig-primary-900) var(--y-contrast)) h 0 l/1);
+    --ig-secondary-50-contrast: hsla(from color(from var(--ig-secondary-50) var(--y-contrast)) h 0 l/1);
+    --ig-secondary-100-contrast: hsla(from color(from var(--ig-secondary-100) var(--y-contrast)) h 0 l/1);
+    --ig-secondary-200-contrast: hsla(from color(from var(--ig-secondary-200) var(--y-contrast)) h 0 l/1);
+    --ig-secondary-300-contrast: hsla(from color(from var(--ig-secondary-300) var(--y-contrast)) h 0 l/1);
+    --ig-secondary-400-contrast: hsla(from color(from var(--ig-secondary-400) var(--y-contrast)) h 0 l/1);
+    --ig-secondary-500-contrast: hsla(from color(from var(--ig-secondary-500) var(--y-contrast)) h 0 l/1);
+    --ig-secondary-600-contrast: hsla(from color(from var(--ig-secondary-600) var(--y-contrast)) h 0 l/1);
+    --ig-secondary-700-contrast: hsla(from color(from var(--ig-secondary-700) var(--y-contrast)) h 0 l/1);
+    --ig-secondary-800-contrast: hsla(from color(from var(--ig-secondary-800) var(--y-contrast)) h 0 l/1);
+    --ig-secondary-900-contrast: hsla(from color(from var(--ig-secondary-900) var(--y-contrast)) h 0 l/1);
+}
+
+.preview-card {
+    box-shadow: 0 24px 60px rgb(0 0 0 / 0.35);
+}
+
+.preview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 20px;
+    padding-top: 12px;
+    align-items: center;
+}
+
+.lab-calendar {
+    max-width: 420px;
+}
+
+.generated {
+    font-size: 0.8rem;
+}

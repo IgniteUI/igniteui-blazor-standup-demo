@@ -1,0 +1,116 @@
+.completeness {
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.85rem;
+}
+
+.forms-body {
+    --ig-size: 3;
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(320px, 1fr);
+    gap: 28px;
+    align-items: center;
+}
+
+.form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 22px;
+    align-content: start;
+    padding: 24px;
+}
+
+.span-2 {
+    grid-column: span 2;
+}
+
+.span-2 {
+    grid-column: span 2;
+}
+
+.toggles {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+}
+
+igc-color-picker {
+    align-self: end;
+}
+
+.badge-col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.badge {
+    overflow: hidden;
+    border-top: 6px solid var(--badge-color);
+    transition: border-color 200ms;
+    box-shadow: 0 24px 60px rgb(0 0 0 / 0.35), 0 0 0 1px color-mix(in srgb, var(--badge-color) 40%, transparent);
+}
+
+.badge-strip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: color-mix(in srgb, var(--badge-color) 22%, transparent);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.badge-avatar {
+    --ig-avatar-background: var(--badge-color);
+    --ig-avatar-color: white;
+}
+
+.badge-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.badge-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.mini-rating {
+    --ig-size: 1;
+}
+
+.badge-topics {
+    margin-top: 12px;
+    gap: 6px;
+}
+
+.badge-qr {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.badge-qr igc-qr-code {
+    --ig-qr-code-background: #ffffff;
+    --ig-qr-code-dark-color: #27265F;
+    --ig-qr-code-corner-square-color: var(--badge-color);
+    --ig-qr-code-corner-dot-color: var(--badge-color);
+    border-radius: 8px;
+    overflow: hidden;
+}

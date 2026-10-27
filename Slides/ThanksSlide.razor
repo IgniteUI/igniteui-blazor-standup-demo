@@ -1,0 +1,46 @@
+<div class="thanks">
+    <div class="thanks-head">
+        <span class="kicker">Get involved</span>
+        <h1 class="slide-h thanks-h">Thank you! <span class="accent">⭐ Star, fork, contribute</span></h1>
+        <p class="lead">Issues, ideas and PRs welcome. The roadmap is public.</p>
+    </div>
+
+    <div class="qr-row">
+        @foreach (var (title, url, label) in links)
+        {
+            <IgbCard thanks-slide class="qr-tile">
+                <IgbCardContent>
+                    <IgbQrCode thanks-slide Value="@url" Size="180" DotStyle="QrDotStyle.Rounded" SquareStyle="QrCornerSquareStyle.Rounded" />
+                    <h3>@title</h3>
+                    <a href="@url" target="_blank" rel="noopener">@label</a>
+                </IgbCardContent>
+            </IgbCard>
+        }
+    </div>
+
+    <div class="sign-off">
+        @foreach (var p in Presenters.All)
+        {
+            <div class="person">
+                <IgbAvatar thanks-slide Src="@p.Avatar" Alt="@p.Name" Shape="AvatarShape.Circle" class="avatar" />
+                <div>
+                    <div class="name">@p.Name</div>
+                    <div class="muted handles">
+                        <IgbIcon IconName="github" Collection="@Icons.Collection" /> @p.GitHub
+                    </div>
+                </div>
+            </div>
+        }
+        <a class="handles discord" href="https://discord.gg/39MjrTRqds" target="_blank" rel="noopener"><IgbIcon IconName="chat" Collection="@Icons.Collection" /> Infragistics Discord</a>
+        <span class="spacer"></span>
+        <img src="img/ignite-ui.png" alt="Ignite UI" class="logo" />
+    </div>
+</div>
+
+@code {
+    private static readonly (string Title, string Url, string Label)[] links =
+    [
+        ("Ignite UI for Blazor", "https://github.com/IgniteUI/igniteui-blazor", "github.com/IgniteUI/igniteui-blazor"),
+        ("Grid Lite", "https://github.com/IgniteUI/IgniteUI.Blazor.GridLite", "github.com/IgniteUI/IgniteUI.Blazor.GridLite"),
+    ];
+}

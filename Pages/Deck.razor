@@ -1,0 +1,80 @@
+@page "/"
+@page "/{Slug}"
+@implements IAsyncDisposable
+
+<PageTitle>@Current.Title · Ignite UI for Blazor</PageTitle>
+
+<div class="deck">
+    <header class="deck-bar">
+        <IgbIconButton IconName="menu" Collection="@Icons.Collection" Variant="IconButtonVariant.Flat"
+                       aria-label="Slides" Command="--toggle" Commandfor="slide-menu" />
+        <img class="logo" src="img/ignite-ui.png" alt="Ignite UI" />
+        <span class="brand">Ignite UI <strong>for Blazor</strong></span>
+        <IgbChip deck class="oss-chip" Variant="StyleVariant.Success">MIT · Open Source</IgbChip>
+        <span class="slide-title">@Current.Title</span>
+        <span class="spacer"></span>
+        <IgbIconButton IconName="notes" Collection="@Icons.Collection" Variant="IconButtonVariant.Flat"
+                       id="notes-btn" aria-label="Speaker notes" @onclick="ToggleNotes" />
+        <IgbTooltip Anchor="notes-btn" Message="Speaker notes" />
+        <IgbIconButton IconName="fullscreen" Collection="@Icons.Collection" Variant="IconButtonVariant.Flat"
+                       id="fs-btn" aria-label="Fullscreen" @onclick="ToggleFullscreen" />
+        <IgbTooltip Anchor="fs-btn" Message="Fullscreen" />
+        <IgbIconButton IconName="github" Collection="@Icons.Collection" Variant="IconButtonVariant.Flat"
+                       id="gh-btn" aria-label="GitHub" Href="https://github.com/IgniteUI/igniteui-blazor"
+                       Target="ButtonBaseTarget._blank" />
+        <IgbTooltip Anchor="gh-btn" Message="IgniteUI/igniteui-blazor" />
+    </header>
+
+    <main class="stage">
+        <div class="slide @(direction >= 0 ? "enter-forward" : "enter-back")" @key="Current.Slug">
+            @* Re-created per slide (the parent is keyed), so a failing slide never takes the deck down *@
+            <ErrorBoundary>
+                <ChildContent>
+                    <DynamicComponent Type="Current.Component" />
+                </ChildContent>
+                <ErrorContent>
+                    <div class="slide-error muted">This slide hit an error. Use the arrows to keep going.</div>
+                </ErrorContent>
+            </ErrorBoundary>
+        </div>
+    </main>
+
+    <footer class="deck-foot">
+        <IgbLinearProgress deck class="deck-progress" Value="@Progress" Max="100" HideLabel="true" AnimationDuration="400" />
+        <div class="deck-nav">
+            <IgbIconButton IconName="chevron_left" Collection="@Icons.Collection" Variant="IconButtonVariant.Outlined"
+                           Disabled="@(Index == 0)" aria-label="Previous slide" @onclick="() => Step(-1)" />
+            <span class="counter">@(Index + 1) / @Registry.Slides.Count</span>
+            <IgbIconButton IconName="chevron_right" Collection="@Icons.Collection" Variant="IconButtonVariant.Contained"
+                           Disabled="@(Index == Registry.Slides.Count - 1)" aria-label="Next slide" @onclick="() => Step(1)" />
+        </div>
+    </footer>
+
+    @if (showNotes)
+    {
+        <aside class="notes" aria-label="Speaker notes">
+            <IgbIcon IconName="notes" Collection="@Icons.Collection" />
+            <p>@Current.Notes</p>
+        </aside>
+    }
+
+    <IgbNavDrawer deck @ref="drawer" id="slide-menu" Position="NavDrawerPosition.Start">
+        <IgbNavDrawerHeaderItem>Slides</IgbNavDrawerHeaderItem>
+        @for (var i = 0; i < Registry.Slides.Count; i++)
+        {
+            var slideIndex = i;
+            var slide = Registry.Slides[i];
+            <IgbNavDrawerItem Active="@(slideIndex == Index)" @onclick="() => GoFromMenu(slideIndex)">
+                <IgbIcon slot="icon" IconName="@slide.Icon" Collection="@Icons.Collection" />
+                <span slot="content">@(slideIndex + 1). @slide.Title</span>
+            </IgbNavDrawerItem>
+        }
+        <div class="drawer-help">
+            <kbd>←</kbd><kbd>→</kbd> / <kbd>PgUp</kbd><kbd>PgDn</kbd> navigate ·
+            <kbd>Home</kbd><kbd>End</kbd> first / last
+        </div>
+    </IgbNavDrawer>
+
+    @* Hidden host used to register the deck's SVG icons once *@
+    <IgbIcon @ref="iconHost" class="icon-host" IconName="bolt" Collection="@Icons.Collection" aria-hidden="true" />
+</div>

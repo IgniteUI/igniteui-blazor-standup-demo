@@ -1,0 +1,91 @@
+<div class="slide-grid ai">
+    <section class="slide-demo chat-col">
+        <IgbChat ai-slide class="chat" Options="options" Messages="messages.ToArray()" MessageCreated="OnMessageCreated" />
+    </section>
+
+    <section class="slide-copy">
+        <span class="kicker">AI-ready</span>
+        <h1 class="slide-h">Give your agent the <span class="accent">real API</span></h1>
+        <p class="lead">
+            Agent Skills and MCP servers keep Copilot, Claude Code or Cursor on the actual Blazor API
+            instead of guessed Angular or React syntax. <b>This deck was built with them.</b>
+        </p>
+
+        <IgbTabs ai-slide class="ai-tabs">
+            <IgbTab Label="Agent Skills" Selected="true">
+                <pre class="code"><span class="c"># GitHub CLI: components, grids, theming, image-to-view</span>
+<span class="k">gh skill install</span> IgniteUI/igniteui-blazor --all</pre>
+                <div class="component-tags">
+                    <span>igniteui-blazor-components</span><span>igniteui-blazor-grids</span>
+                    <span>igniteui-blazor-theming</span><span>igniteui-blazor-generate-from-image-design</span>
+                    <span class="soon-tag">Figma to code · coming soon</span>
+                </div>
+                <p class="muted tab-note">Or with the Ignite UI CLI: the same skills plus agent rules (AGENTS.md, CLAUDE.md, …) and the MCP config</p>
+                <pre class="code"><span class="k">npx igniteui-cli ai-config</span>   <span class="c"># or: ig ai-config</span></pre>
+            </IgbTab>
+            <IgbTab Label="MCP servers">
+                <pre class="code"><span class="c">// .vscode/mcp.json ("servers") · .mcp.json ("mcpServers")</span>
+{
+  <span class="s">"igniteui-theming"</span>: { <span class="k">"command"</span>: <span class="s">"npx"</span>,
+    <span class="k">"args"</span>: [<span class="s">"-y"</span>, <span class="s">"igniteui-theming"</span>, <span class="s">"igniteui-theming-mcp"</span>] },
+  <span class="s">"igniteui-cli"</span>: { <span class="k">"command"</span>: <span class="s">"npx"</span>,
+    <span class="k">"args"</span>: [<span class="s">"-y"</span>, <span class="s">"igniteui-cli"</span>, <span class="s">"mcp"</span>] }
+}</pre>
+                <p class="muted tab-note"><code>ig ai-config</code> writes this for you.</p>
+            </IgbTab>
+            <IgbTab Label="This deck">
+                <ul class="points">
+                    <li><span>Brand palette: <code>create_custom_palette</code> pins #0099FF / #F05A2B, all other shades generated</span></li>
+                    <li><span>Component APIs from the skills, checked against the 1.0 package</span></li>
+                    <li><span>Grid Lite bound through <code>FilterExpressions</code> / <code>SortingExpressions</code> and its <code>Filtered</code> / <code>Sorted</code> events</span></li>
+                    <li><span>Client-side Combo templates via <code>registerScript</code> from <code>api.js</code></span></li>
+                </ul>
+            </IgbTab>
+        </IgbTabs>
+    </section>
+</div>
+
+@code {
+    private readonly List<IgbChatMessage> messages =
+    [
+        new() { Id = "m0", Sender = "bot", Text = "Hi! I'm a scripted demo assistant. This is IgbChat (preview) from IgniteUI.Blazor.Lite. Ask me something, or tap a suggestion." },
+    ];
+
+    private readonly IgbChatOptions options = new()
+    {
+        CurrentUserId = "you",
+        HeaderText = "Ignite UI assistant",
+        InputPlaceholder = "Ask about Ignite UI for Blazor…",
+        DisableInputAttachments = true,
+        SuggestionsPosition = ChatSuggestionsPosition.BelowMessages,
+        Suggestions = ["Is it really free?", "How do I install it?", "What's new?", "Does it work with AI agents?"],
+    };
+
+    private static readonly (string[] Keys, string Answer)[] answers =
+    [
+        (["free", "license", "mit", "cost"], "Yes. IgniteUI.Blazor.Lite and IgniteUI.Blazor.GridLite are MIT licensed, commercial use included. The full IgniteUI.Blazor adds charts, the enterprise grids and Dock Manager."),
+        (["install", "start", "setup", "nuget"], "dotnet add package IgniteUI.Blazor.Lite, then builder.Services.AddIgniteUIBlazor(), @using IgniteUI.Blazor.Controls, and one theme stylesheet. No script tag needed."),
+        (["new", "1.0", "release"], "Both packages are now 1.0. Recent releases added Color Picker, QR Code, Breadcrumbs and Chat (preview), and the form controls bind generic values: enums, System.Drawing.Color, DateTime?."),
+        (["ai", "agent", "mcp", "skill", "copilot", "claude"], "Run `ig ai-config` in your project: it adds the Agent Skills, agent rules like AGENTS.md, and the igniteui-theming and igniteui-cli MCP servers. Figma to code is coming soon."),
+        (["grid", "table"], "Grid Lite is MIT: virtualized, with sorting, filtering and column resizing. When you need editing, paging or export, upgrade to IgbGrid."),
+        (["theme", "color", "dark"], "Four design systems (Material, Bootstrap, Fluent, Indigo) in light and dark. Everything is CSS custom properties, and IgbThemeProvider scopes a theme to part of the page."),
+    ];
+
+    private async Task OnMessageCreated(IgbChatMessageEventArgs e)
+    {
+        var text = e.Detail.Text ?? "";
+        if (!messages.Any(m => m.Id == e.Detail.Id))
+        {
+            messages.Add(new() { Id = e.Detail.Id ?? Guid.NewGuid().ToString(), Sender = "you", Text = text });
+        }
+
+        options.IsTyping = true;
+        StateHasChanged();
+        await Task.Delay(900);
+
+        var answer = answers.FirstOrDefault(a => a.Keys.Any(k => text.Contains(k, StringComparison.OrdinalIgnoreCase))).Answer
+                     ?? "Good question! The docs, the skills or the GitHub discussions will have it. Or ask me about licensing, install, 1.0, grids, theming or AI.";
+        options.IsTyping = false;
+        messages.Add(new() { Id = Guid.NewGuid().ToString(), Sender = "bot", Text = answer });
+    }
+}

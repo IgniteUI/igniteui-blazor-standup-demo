@@ -1,0 +1,86 @@
+You are an expert in C#, Blazor, and scalable web application development. You write functional, maintainable, performant, and accessible code following .NET and Blazor best practices. You are currently immersed in the latest .NET and Blazor, adopting modern C# features, component-based architecture with clean separation of concerns, and modern Blazor patterns for reactive UI and dependency injection.
+
+## Coding Standards
+
+- Use strict type checking and enable nullability (`#nullable enable`)
+- Prefer type inference (`var`) when the type is obvious
+- Avoid `dynamic`; use generics or `object` with pattern matching when type is uncertain
+- Use the latest C# version supported by the project;
+- Prefer modern C# features: record types, pattern matching, global usings, file-scoped namespaces, primary constructors
+- Use PascalCase for public members and component names; camelCase for private fields; prefix interfaces with `I` (e.g., `IUserService`)
+- Follow the official .NET coding conventions: https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions
+
+## Blazor Architecture
+
+- **File separation**: `.razor` (template), `.razor.cs` (logic), `.razor.css` (scoped styles)
+- **Lifecycle**: Use `OnInitializedAsync` / `OnParametersSetAsync` for initialization and parameter changes
+- **Data binding**: Use `@bind` for two-way binding
+- **Component design**: Keep components small and focused on a single responsibility
+- **Component inputs and outputs**: Use `[Parameter]` for component inputs and `EventCallback` for component outputs
+- **Event handling**: Prefer `EventCallback<T>` over `Action<T>` for event handling to integrate with the Blazor render pipeline
+- **DI**: Inject via `[Inject]` property or `@inject` directive; use `async/await` for all I/O
+- **HTTP**: Use `HttpClient` or appropriate services to communicate with external APIs
+- **Rendering**: Override `ShouldRender()` to skip unnecessary re-renders; call `StateHasChanged()` only outside Blazor's event pipeline
+- **Errors**: Wrap components in `ErrorBoundary`; use try-catch for API calls with `ILogger` diagnostics
+- **Validation**: Use `FluentValidation` or `DataAnnotations` for form validation
+
+## State Management
+
+- Basic sharing: Cascading Parameters + `EventCallback`
+- Session state (Server): StateContainer pattern via Scoped Service
+- Persistence (WASM): `Blazored.LocalStorage` / `Blazored.SessionStorage`
+- Complex apps: Fluxor or BlazorState
+
+## Styling
+
+- Use `.razor.css` scoped stylesheets files for component-specific styles; CSS isolation prevents leakage between components
+- Prefer CSS custom properties for themeable values
+- Do NOT use inline styles; extract to `.razor.css` or a shared stylesheet
+
+## Caching
+
+- Use `IMemoryCache` for lightweight server-side caching in Blazor Server apps
+- For Blazor WebAssembly, use `localStorage` or `sessionStorage` to cache state between page reloads
+- Consider distributed cache strategies (Redis, SQL Server Cache) for larger apps requiring shared state across multiple users
+- Cache API responses to avoid redundant calls when data is unlikely to change
+
+## Security
+
+- Use ASP.NET Identity or JWT for auth; always HTTPS with proper CORS
+- Never expose sensitive data in client-side Blazor WebAssembly code
+
+## Testing
+
+- Unit/integration: xUnit or MSTest with Moq or NSubstitute
+- Component tests: bUnit for rendering and interaction verification
+- Use Visual Studio's diagnostics tools for performance profiling
+
+## UI Components — Ignite UI for Blazor
+
+- **Packages**: `IgniteUI.Blazor.Lite` for general-purpose components and `IgniteUI.Blazor.GridLite` for the lightweight grid (both MIT, NuGet.org); `IgniteUI.Blazor` — publicly available for evaluation as `IgniteUI.Blazor.Trial` — for feature-rich grids, charts, maps, gauges, and Dock Manager. If the project already references the full `IgniteUI.Blazor`, do not add Lite or GridLite unless the user explicitly chooses to switch package strategy. If no Ignite UI package is present, add the one that matches the chosen strategy.
+- **Setup**: `builder.Services.AddIgniteUIBlazor()` in `Program.cs`, `@using IgniteUI.Blazor.Controls` in `_Imports.razor`, and one theme stylesheet in the host page. `IgniteUI.Blazor.Lite` loads its scripts itself (JS initializer); the full `IgniteUI.Blazor`/`.Trial` also needs `_content/IgniteUI.Blazor/app.bundle.js` before the Blazor script in Blazor Web Apps (so the library's client resources initialize correctly there) — never wrapped in `@Assets[...]`.
+- **Do not write Ignite UI component, property, or event names from memory** — the Blazor API differs from the Angular, React, and Web Components products. Use the `skills/` reference files and the `igniteui-cli` MCP server.
+- Prefer the `Async` form of component methods (`ShowAsync()`, not `Show()`); the sync twins require an in-process JS runtime and throw on Blazor Server.
+- Style components with `--ig-*` design tokens on `igc-*` selectors (in this project, through fixed CSS scopes rather than `::deep`; see below). Scope a theme to a page region with `IgbThemeProvider`.
+
+## This project
+
+A slide deck for the Blazor Community Standup, built as a standalone Blazor WebAssembly app (.NET 10) on `IgniteUI.Blazor.Lite` + `IgniteUI.Blazor.GridLite` 1.0.
+
+- Slide order, titles, icons and speaker notes live in `Deck/SlideRegistry.cs`. Each slide is a component in `Slides/`.
+- Blazor-ApexCharts components (the ApexCharts slide and the dashboard chart tile) live in `Charts/`.
+- Presenters (name, GitHub handle, avatar) for the title and thank-you slides are in `Deck/Presenters.cs`; avatars are `wwwroot/img/<first>-<last>.jpg`.
+- Theme: Material dark (`index.html`). Brand palette: `wwwroot/css/ig-palette.css`, generated with the igniteui-theming MCP (`create_palette` + `create_custom_palette` brand pins). Regenerate it rather than hand-editing shades. `lab-palettes.css` holds the stock design-system palettes, scoped to the Theming slide preview.
+- `.theme-showcase` regions (Getting started step 3, Theming preview) must show the built-in themes' real defaults: no deck-level token tweaks inside them (reset such tokens with `initial` there).
+- Agent setup: instructions live in this `AGENTS.md` (`.claude/CLAUDE.md` imports it with `@../AGENTS.md`). Ignite UI skills are installed under `.agents/skills/` (`gh skill install IgniteUI/igniteui-blazor --all --agent universal`) and linked per skill into `.claude/skills/` for Claude Code; update them there and keep the links. MCP servers are configured in `.mcp.json` and `.vscode/mcp.json`.
+
+### Patterns used in this codebase
+
+- Every `.razor.css` has a fixed scope name set in `StandupDemo.csproj` (`CssScope`, e.g. `grid-lite-slide`). An Ignite UI component that a page styles carries that name as an attribute (`<IgbCard grid-lite-slide class="grid-card">`), so its selectors work without `::deep`. Prefer parent layout (grid/flex containers) for sizing.
+- The tree, range slider, theme provider and tile manager modules are preloaded in `Program.cs` (`AddIgniteUIBlazor(typeof(IgbTreeModule), …)`). Grid Lite rows are handed over from its `Rendered` event; the salary range slider gets `Min`/`Lower`/`Upper` from then on, once `Max` and `Step` are set.
+- Optional Grid Lite columns are rendered with `@if` rather than toggled with `Hidden`.
+- Buttons that only open or close a dialog or drawer use `Command` / `Commandfor`. Feedback that follows an action (a toast after saving, the snackbar after confirming) is shown from the handler with `ShowAsync()`.
+- Calendar and date picker values come back as UTC instants; they are converted with `.ToLocalTime()` in `@bind-Value:set` before any day-based logic or display.
+- Theme previews are an `IgbThemeProvider` bound to the picked theme/variant, inside a `.theme-showcase` with `data-theme` / `data-variant`, which picks up `showcase-typography.css` and the palettes in `lab-palettes.css`.
+- `igc-grid-lite` is sized by its container (a grid or flex parent); its own `display` is left alone.
+- Grid Lite state is bound, not imperative: `FilterExpressions` / `SortingExpressions` come from the slide's state, and `Filtered` / `Sorted` write grid-UI changes back into it.
