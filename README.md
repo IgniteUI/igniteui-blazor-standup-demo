@@ -1,8 +1,12 @@
 # Ignite UI for Blazor: open source slide deck
 
 The slide deck for the Blazor Community Standup on Ignite UI for Blazor going open source, built as a live
-Blazor WebAssembly app. Every slide is made of **IgniteUI.Blazor.Lite** and **IgniteUI.Blazor.GridLite** components
-(both MIT, 1.0), with [Blazor-ApexCharts](https://github.com/apexcharts/Blazor-ApexCharts) for the charts.
+Blazor WebAssembly app. Every slide is made of **IgniteUI.Blazor.Lite** ([NuGet](https://www.nuget.org/packages/IgniteUI.Blazor.Lite),
+[GitHub](https://github.com/IgniteUI/igniteui-blazor)) and **IgniteUI.Blazor.GridLite** ([NuGet](https://www.nuget.org/packages/IgniteUI.Blazor.GridLite),
+[GitHub](https://github.com/IgniteUI/IgniteUI.Blazor.GridLite)) components (both MIT, 1.0), with
+[Blazor-ApexCharts](https://github.com/apexcharts/Blazor-ApexCharts) for the charts.
+
+**See it live: [igniteui.github.io/igniteui-blazor-standup-demo](https://igniteui.github.io/igniteui-blazor-standup-demo/)**
 
 ## Run it
 
@@ -38,7 +42,7 @@ Every slide has its own URL (`/grid-lite`, `/theming`, …), and the deck scales
 | 7 | Dashboard: drag, resize, save and restore the layout | Tile Manager, Calendar, List, Carousel, Grid Lite, progress indicators |
 | 8 | Theming: design systems, palettes and layout tokens | Theme Provider, Color Picker, Slider, Button Group |
 | 9 | AI-ready: Agent Skills (`gh skill install` or `ig ai-config`), MCP servers | Chat (preview), Tabs |
-| 10 | Thank you | Card, QR Code, Avatar |
+| 10 | Thank you: repo QR codes, presenters, links to this deck (live and source) | Card, QR Code, Avatar |
 
 Slide order, titles and speaker notes live in `Deck/SlideRegistry.cs`; each slide is a component in `Slides/`
 (the chart components are in `Charts/`).
@@ -47,7 +51,8 @@ Slide order, titles and speaker notes live in `Deck/SlideRegistry.cs`; each slid
 
 `.github/workflows/deploy.yml` follows [igniteui-blazor-lite-examples](https://github.com/IgniteUI/igniteui-blazor-lite-examples):
 it publishes on every push to `main`/`master`, rewrites `<base href>` to `/<repo-name>/`, and copies `index.html` to
-`404.html` so deep links work. Enable it under **Settings → Pages → Source: GitHub Actions**.
+`404.html` so deep links work. Enable it under **Settings → Pages → Source: GitHub Actions**. This repo deploys to
+[igniteui.github.io/igniteui-blazor-standup-demo](https://igniteui.github.io/igniteui-blazor-standup-demo/).
 
 ## Tooling used to build this
 

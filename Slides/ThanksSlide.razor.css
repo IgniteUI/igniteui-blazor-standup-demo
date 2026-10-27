@@ -92,6 +92,12 @@
     text-decoration: underline;
 }
 
+.deck-links {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
 .logo {
     width: 56px;
 }
