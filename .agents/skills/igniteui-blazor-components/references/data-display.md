@@ -161,19 +161,54 @@ Renders the `Value` string (URL, text, any payload) as a scannable SVG. `Version
 @code { IgbQrCode? Qr; }
 ```
 
-## Ripple, Highlight, Chat
+## Ripple, Chat
 
 ```razor
 <div style="position: relative; padding: 16px;">Click me<IgbRipple /></div>
-
-<IgbHighlight SearchText="@query" CaseSensitive="false">@text</IgbHighlight>
 
 <IgbChat Options="ChatOptions" DraftMessage="Draft" MessageCreated="OnMessageCreated" />
 ```
 
 - `IgbRipple` needs a `position: relative` parent; customize with the `--color` custom property.
-- `IgbHighlight` marks occurrences of `SearchText` inside its content.
 - `IgbChat` is a full chat surface configured through `IgbChatOptions` (messages, suggestions, renderers) with `MessageCreated`, `MessageReact`, `AttachmentClick`, `TypingChange`, `InputFocus`, `InputBlur`. Read its doc before building against it — the options object is large.
+
+## Highlight
+
+`IgbHighlight` marks every occurrence of `SearchText` in the text inside it, including nested markup and other components' content, so one highlight can wrap a whole filtered list. Bind `SearchText` to the same field as the search box:
+
+```razor
+<IgbInput @bind-Value="query" Placeholder="Search" />
+
+<IgbHighlight SearchText="@query">
+    <IgbList>
+        @foreach (var product in Matches)
+        {
+            <IgbListItem>
+                <span slot="title">@product.Name</span>
+                <span slot="subtitle">@product.Description</span>
+            </IgbListItem>
+        }
+    </IgbList>
+</IgbHighlight>
+
+@code {
+    string query = "";
+    IEnumerable<Product> Matches => products.Where(p => query.Length == 0
+        || p.Name.Contains(query, StringComparison.OrdinalIgnoreCase)
+        || p.Description.Contains(query, StringComparison.OrdinalIgnoreCase));
+}
+```
+
+| Member | Type | Notes |
+|---|---|---|
+| `SearchText` | `string` | Setting it re-runs the search; an empty string clears the highlights |
+| `CaseSensitive` | `bool` | Default `false` |
+| `GetSizeAsync()` | `Task<double>` | Number of matches |
+| `GetCurrentAsync()` | `Task<double>` | Zero-based index of the active match |
+| `NextAsync()` / `PreviousAsync()` / `SetActiveAsync(index)` | `Task` | Move the active match (wraps around); optional `IgbHighlightNavigation { PreventScroll = true }` |
+| `SearchAsync()` | `Task` | Re-run the search after the content changes while `SearchText` stays the same |
+
+`IgbInput`'s `@bind-Value` updates on Enter / blur; handle `InputOcurred` instead to search while typing.
 
 ## Carousel
 

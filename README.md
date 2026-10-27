@@ -57,3 +57,16 @@ it publishes on every push to `main`/`master`, rewrites `<base href>` to `/<repo
 - **Palette**: `wwwroot/css/ig-palette.css` comes from the theming MCP. `create_palette` (primary `#0099FF`, secondary
   `#F05A2B`, surface `#27265F`) generates the full set. `create_custom_palette` pins the 500 shades to the exact brand colors
   and adds a navy-tinted gray ramp, because some themes paint cards and dialogs with `--ig-gray-50`.
+
+## Add a slide with an agent
+
+With the skills and MCP servers above, this prompt adds a slide to the deck. It takes Claude Code under two minutes
+on Sonnet:
+
+```text
+Add an "FAQ" slide after "AI-ready": a searchable FAQ for Ignite UI for Blazor Lite.
+- Seed it with the questions this deck answers (MIT/commercial use, install, hosting models, theming, AI skills, upgrading to the full grid), as an accordion.
+- Searching filters the questions, opens the matches and highlights them.
+- Below, a way to ask a new question: it's added on top, open and marked unanswered, and can be answered right in place.
+- Style the slide like .NET Conf, with its own palette: purple-to-pink gradients (#512BD4 → #D600AA).
+```

@@ -29,14 +29,24 @@ The examples compile in both packages, and the types shown are the full `IgniteU
 
 | Member | Type | Notes |
 |---|---|---|
-| `Value` / `@bind-Value` | `string` | The correct way to read and write the value |
+| `Value` / `@bind-Value` | `string` | The correct way to read and write the value; `@bind-Value` updates on commit (Enter / blur) |
 | `DisplayType` | `InputType` | `IgbInput` only — text, password, email, number, … |
-| `InputOcurred` | `EventCallback<IgbComponentValueChangedEventArgs>` | Fires while typing (name is spelled with one `c`) |
+| `InputOcurred` | `EventCallback<IgbComponentValueChangedEventArgs>` | `IgbInput` only — fires while typing (name is spelled with one `c`) |
+| `Input` | `EventCallback<IgbComponentValueChangedEventArgs>` | `IgbTextarea` only — fires while typing |
 | `Change` | `EventCallback<IgbComponentValueChangedEventArgs>` | Fires on commit / blur |
 | `Focus`, `Blur` | `EventCallback<IgbVoidEventArgs>` | |
 | `Rows`, `Resize`, `Wrap`, `MaxLength` | | `IgbTextarea` only |
 
 `IgbInput` has **no** `GetValueAsync()`. Bind with `@bind-Value` instead of reading imperatively.
+
+`@bind-Value` writes back on commit, not per keystroke. When something must react while the user types (a live filter, a button enabled by the text), set `Value` and update the field from the typing event instead:
+
+```razor
+<IgbTextarea Value="@draft" Input="e => draft = e.Detail ?? string.Empty" />
+<IgbButton Disabled="@string.IsNullOrWhiteSpace(draft)" @onclick="Send">Send</IgbButton>
+```
+
+With `@bind-Value` there, typing and then clicking the button loses the first click: the button is still disabled when the click lands, and the commit on blur only enables it afterwards.
 
 Icons in `prefix` / `suffix` slots must be `IgbIcon`. A `<span class="material-icons">` is `display: inline`, so `vertical-align` is ignored inside the slot's flex box and the glyph drifts to the top.
 
