@@ -243,6 +243,10 @@ kbd {
     background: rgb(0 153 255 / 0.08);
 }
 
+.component-tags igc-chip {
+    --size: var(--ig-size-small);
+}
+
 .muted {
     color: var(--text-muted);
 }
