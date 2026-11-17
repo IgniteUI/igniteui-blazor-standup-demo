@@ -15,10 +15,12 @@
             <IgbTab Label="Agent Skills" Selected="true">
                 <pre class="code"><span class="c"># GitHub CLI: components, grids, theming, image-to-view</span>
 <span class="k">gh skill install</span> IgniteUI/igniteui-blazor --all</pre>
-                <div class="component-tags">
-                    <span>igniteui-blazor-components</span><span>igniteui-blazor-grids</span>
-                    <span>igniteui-blazor-theming</span><span>igniteui-blazor-generate-from-image-design</span>
-                    <span class="soon-tag">Figma to code · coming soon</span>
+                <div class="component-tags" role="list">
+                    @foreach (var tag in skills)
+                    {
+                        <IgbBadge Outlined role="listitem">@tag</IgbBadge>
+                    }
+                    <IgbBadge Outlined role="listitem" class="soon-tag" ai-slide>Figma to code · coming soon</IgbBadge>
                 </div>
                 <p class="muted tab-note">Or with the Ignite UI CLI: the same skills plus agent rules (AGENTS.md, CLAUDE.md, …) and the MCP config</p>
                 <pre class="code"><span class="k">npx igniteui-cli ai-config</span>   <span class="c"># or: ig ai-config</span></pre>
@@ -60,6 +62,9 @@
         SuggestionsPosition = ChatSuggestionsPosition.BelowMessages,
         Suggestions = ["Is it really free?", "How do I install it?", "What's new?", "Does it work with AI agents?"],
     };
+
+    private static readonly string[] skills =
+        ["igniteui-blazor-components", "igniteui-blazor-grids", "igniteui-blazor-theming", "igniteui-blazor-generate-from-image-design"];
 
     private static readonly (string[] Keys, string Answer)[] answers =
     [

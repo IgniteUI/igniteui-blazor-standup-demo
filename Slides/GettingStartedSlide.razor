@@ -4,14 +4,11 @@
             <span class="kicker">Scenario · Layout &amp; navigation</span>
             <h1 class="slide-h">From <span class="blue">dotnet new</span> to components <span class="accent">in four steps</span></h1>
         </div>
-        <div class="component-tags">
-            <IgbChip Outlined Variant="StyleVariant.Primary">Splitter</IgbChip>
-            <IgbChip Outlined Variant="StyleVariant.Primary">Tree</IgbChip>
-            <IgbChip Outlined Variant="StyleVariant.Primary">Breadcrumbs</IgbChip>
-            <IgbChip Outlined Variant="StyleVariant.Primary">Stepper</IgbChip>
-            <IgbChip Outlined Variant="StyleVariant.Primary">Tabs</IgbChip>
-            <IgbChip Outlined Variant="StyleVariant.Primary">ButtonGroup</IgbChip>
-            <IgbChip Outlined Variant="StyleVariant.Primary">Theme Provider</IgbChip>
+        <div class="component-tags" role="list">
+            @foreach (var tag in componentTags)
+            {
+                <IgbBadge Outlined role="listitem">@tag</IgbBadge>
+            }
         </div>
     </header>
 

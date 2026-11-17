@@ -6,6 +6,8 @@ public partial class GettingStartedSlide
 {
     private sealed record ProjectFile(string Name, string? Folder, int Step);
 
+    private static readonly string[] componentTags = ["Splitter", "Tree", "Breadcrumbs", "Stepper", "Tabs", "ButtonGroup", "Theme Provider"];
+
     // The Tree and the Stepper both drive (and follow) the same step index.
     private static readonly ProjectFile[] files =
     [
