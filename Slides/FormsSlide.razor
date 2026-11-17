@@ -95,11 +95,11 @@
                     </div>
                 </IgbCardContent>
             </IgbCard>
-            <div class="component-tags">
-                <span>Input</span><span>MaskInput</span><span>Select</span><span>Combo</span><span>DatePicker</span>
-                <span>ColorPicker</span><span>RadioGroup</span><span>Slider</span><span>Rating</span><span>Switch</span>
-                <span>Checkbox</span><span>Card</span><span>Avatar</span><span>Chip</span><span>QrCode</span>
-                <span>Dialog</span><span>Snackbar</span>
+            <div class="component-tags" role="list">
+                @foreach (var tag in componentTags)
+                {
+                    <IgbBadge Outlined role="listitem">@tag</IgbBadge>
+                }
             </div>
         </section>
     </div>

@@ -4,8 +4,11 @@
             <span class="kicker">Scenario · Layout &amp; navigation</span>
             <h1 class="slide-h">From <span class="blue">dotnet new</span> to components <span class="accent">in four steps</span></h1>
         </div>
-        <div class="component-tags">
-            <span>Splitter</span><span>Tree</span><span>Breadcrumbs</span><span>Stepper</span><span>Tabs</span><span>ButtonGroup</span><span>Theme Provider</span>
+        <div class="component-tags" role="list">
+            @foreach (var tag in componentTags)
+            {
+                <IgbBadge Outlined role="listitem">@tag</IgbBadge>
+            }
         </div>
     </header>
 
@@ -117,7 +120,7 @@ builder.Services.<span class="t">AddIgniteUIBlazor</span>();</pre>
                         </div>
                         <pre class="code">&lt;<span class="t">link</span> href=<span class="s">"_content/IgniteUI.Blazor/themes/@(dark ? "dark" : "light")/@(theme.ToLowerInvariant()).css"</span> rel=<span class="s">"stylesheet"</span> /&gt;</pre>
                         <IgbThemeProvider Theme="@ThemeEnum" Variant="@(dark ? ThemeVariant.Dark : ThemeVariant.Light)">
-                            <div class="theme-preview theme-showcase" data-theme="@theme.ToLowerInvariant()" data-variant="@(dark ? "dark" : "light")">
+                            <div class="theme-preview theme-showcase theme-lab" data-palette="@theme.ToLowerInvariant()" data-theme="@theme.ToLowerInvariant()" data-variant="@(dark ? "dark" : "light")">
                                 <div class="row">
                                     <IgbButton Variant="ButtonVariant.Contained">Contained</IgbButton>
                                     <IgbButton Variant="ButtonVariant.Outlined">Outlined</IgbButton>

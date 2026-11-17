@@ -230,17 +230,21 @@ kbd {
 .component-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 0.625rem;
+    padding: 2px;
 }
 
-.component-tags span {
+/* Outlined badges in palette shades; --tag-text-color / --tag-border-color switch the hue */
+.component-tags igc-badge {
+    --tag-text-color: var(--ig-primary-300);
+    --tag-border-color: var(--ig-primary-800);
+    --ig-size: var(--ig-size-medium);
+    --ig-body-2-font-size: 0.75rem;
+    --ig-badge-size: 1rem;
+    --ig-badge-background-color: color-mix(in srgb, var(--tag-border-color) 15%, transparent);
+    --ig-badge-text-color: var(--tag-text-color);
+    --ig-badge-border-color: color-mix(in srgb, var(--tag-border-color) 55%, transparent);
     font-family: var(--font-mono);
-    font-size: 0.75rem;
-    padding: 2px 8px;
-    border-radius: 999px;
-    border: 1px solid rgb(0 153 255 / 0.45);
-    color: var(--ig-primary-200);
-    background: rgb(0 153 255 / 0.08);
 }
 
 .muted {

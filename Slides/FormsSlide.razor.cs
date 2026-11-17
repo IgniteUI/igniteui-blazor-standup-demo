@@ -12,6 +12,12 @@ public partial class FormsSlide
 
     private readonly DateTime? minDay = new DateTime(2026, 11, 10);
     private readonly DateTime? maxDay = new DateTime(2026, 11, 12);
+    private static readonly string[] componentTags =
+    [
+        "Input", "MaskInput", "Select", "Combo", "DatePicker", "ColorPicker", "RadioGroup", "Slider", "Rating",
+        "Switch", "Checkbox", "Card", "Avatar", "Chip", "QrCode", "Dialog", "Snackbar",
+    ];
+
     private static readonly string[] badgeSwatches = ["#0099FF", "#F05A2B", "#7EE2B8", "#C49BFF", "#FFD166", "#27265F"];
 
     private int Completeness
