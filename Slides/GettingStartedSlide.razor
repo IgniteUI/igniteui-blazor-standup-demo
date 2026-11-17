@@ -123,7 +123,7 @@ builder.Services.<span class="t">AddIgniteUIBlazor</span>();</pre>
                         </div>
                         <pre class="code">&lt;<span class="t">link</span> href=<span class="s">"_content/IgniteUI.Blazor/themes/@(dark ? "dark" : "light")/@(theme.ToLowerInvariant()).css"</span> rel=<span class="s">"stylesheet"</span> /&gt;</pre>
                         <IgbThemeProvider Theme="@ThemeEnum" Variant="@(dark ? ThemeVariant.Dark : ThemeVariant.Light)">
-                            <div class="theme-preview theme-showcase" data-theme="@theme.ToLowerInvariant()" data-variant="@(dark ? "dark" : "light")">
+                            <div class="theme-preview theme-showcase theme-lab" data-palette="@theme.ToLowerInvariant()" data-theme="@theme.ToLowerInvariant()" data-variant="@(dark ? "dark" : "light")">
                                 <div class="row">
                                     <IgbButton Variant="ButtonVariant.Contained">Contained</IgbButton>
                                     <IgbButton Variant="ButtonVariant.Outlined">Outlined</IgbButton>
