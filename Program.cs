@@ -13,9 +13,11 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 // tile manager modules are preloaded, so they are ready before their slides render.
 // IgniteUI.Blazor.Trial (the commercial product) builds on Lite and registers through the same call: its grids,
 // Dock Manager and charts are preloaded too, plus the chart interactivity feature module (zoom and pan), which
-// nothing requests on render.
+// nothing requests on render. Rating is preloaded because the Grid slide renders igc-rating from a client-side cell
+// template, not through IgbRating, so opening that slide directly would otherwise leave the element undefined.
 builder.Services.AddIgniteUIBlazor(
     typeof(IgbTreeModule), typeof(IgbRangeSliderModule), typeof(IgbThemeProviderModule), typeof(IgbTileManagerModule),
+    typeof(IgbRatingModule),
     typeof(IgbGridModule), typeof(IgbTreeGridModule), typeof(IgbHierarchicalGridModule),
     typeof(IgbPivotGridModule), typeof(IgbPivotDataSelectorModule), typeof(IgbDockManagerModule),
     typeof(IgbCategoryChartModule), typeof(IgbFinancialChartModule), typeof(IgbDoughnutChartModule),

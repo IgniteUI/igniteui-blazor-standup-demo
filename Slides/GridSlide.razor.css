@@ -58,6 +58,7 @@ igc-grid {
     --ig-size: var(--ig-size-medium);
 }
 
+/* Rendered by the EmployeeRating client template (wwwroot/js/templates.js), which adds the grid-slide scope attribute */
 igc-rating.cell-rating {
     --ig-size: var(--ig-size-small);
     pointer-events: none;

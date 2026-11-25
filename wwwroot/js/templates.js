@@ -27,3 +27,10 @@ registerScript('WatchlistChange', ({ cell }) => {
     const text = `${change >= 0 ? '+' : ''}${(change * 100).toFixed(2)}%`;
     return html`<span style="color:${color};font-weight:600;font-variant-numeric:tabular-nums">${text}</span>`;
 });
+
+// Employee rating: the Lite igc-rating element in a commercial grid cell (Grid slide). A Razor BodyTemplate here
+// called into .NET for every cell the grid rendered, which made expanding groups and scrolling slow; this renders
+// in the browser. The grid-slide attribute is the slide's CSS scope, so GridSlide.razor.css still styles it.
+registerScript('EmployeeRating', ({ cell }) => html`
+    <igc-rating grid-slide class="cell-rating" .value=${Number(cell?.value ?? 0)} .max=${5} .readOnly=${true}></igc-rating>
+`);

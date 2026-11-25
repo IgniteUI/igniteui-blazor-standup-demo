@@ -1,5 +1,3 @@
-using System.Globalization;
-using System.Text.Json;
 using IgniteUI.Blazor.Controls;
 using StandupDemo.Data;
 
@@ -87,12 +85,4 @@ public partial class GridSlide
         selectedCount = e.Detail?.NewSelection?.Length ?? 0;
 
     private void OnRowEditDone(IgbGridEditDoneEventArgs e) => editCount++;
-
-    private static double ToRating(object? value) => value switch
-    {
-        double d => d,
-        JsonElement { ValueKind: JsonValueKind.Number } json => json.GetDouble(),
-        IConvertible convertible => convertible.ToDouble(CultureInfo.InvariantCulture),
-        _ => 0,
-    };
 }

@@ -47,7 +47,7 @@ Every slide has its own URL (`/grid-lite`, `/theming`, …), and the deck scales
 | 8 | Theming: design systems, palettes and layout tokens | Theme Provider, Color Picker, Slider, Button Group |
 | 9 | AI-ready: Agent Skills (`gh skill install` or `ig ai-config`), MCP servers | Chat (preview), Tabs |
 | 10 | Going further: upgrading from Lite to the commercial IgniteUI.Blazor in place | Badge |
-| 11 | Grid: the Grid Lite employees in IgbGrid, with grouping, summaries, selection, row editing, pinning, toolbar and export | Grid, Rating (in a cell template), Chip, Button Group, Switch |
+| 11 | Grid: the Grid Lite employees in IgbGrid, with grouping, summaries, selection, row editing, pinning, toolbar and export | Grid, Rating (in a client-side cell template), Chip, Button Group, Switch |
 | 12 | Tree, hierarchical and pivot grids: an org chart, country → department → people, salary by department and country | Tree Grid, Hierarchical Grid, Pivot Grid, Pivot Data Selector, Button Group |
 | 13 | High-performance charts: a million points from the browser with zoom, and a live feed driven from C# | Category Chart, Button Group, Icon Button |
 | 14 | Dock Manager: a trading workspace with save / restore of the layout | Dock Manager, Grid, Financial Chart, Doughnut Chart, Input, Select, List, Toast |
