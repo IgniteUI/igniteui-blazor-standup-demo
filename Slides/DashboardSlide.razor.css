@@ -97,6 +97,9 @@
 .highlight h3 {
     margin: 0 0 8px;
     font-size: 1.6rem;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: inherit;
     color: var(--accent);
 }
 
@@ -104,6 +107,7 @@
     margin: 0;
     font-size: 1rem;
     line-height: 1.5;
+    letter-spacing: normal;
     color: var(--text-muted);
 }
 

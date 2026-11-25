@@ -41,6 +41,7 @@
     margin: auto 0 0;
     font-size: 0.85rem;
     line-height: 1.45;
+    letter-spacing: normal;
 }
 
 /* A plain grid cell: its stretched height is definite, so the grid's Height="100%" resolves against it */

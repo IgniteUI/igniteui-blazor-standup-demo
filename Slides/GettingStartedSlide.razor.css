@@ -37,6 +37,9 @@
 
 .step-body p {
     margin: 0;
+    /* Text of the step body (stepper content), not the theme's body-1 */
+    font: inherit;
+    letter-spacing: inherit;
 }
 
 .theme-preview {

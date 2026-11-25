@@ -139,11 +139,17 @@ kbd {
     font-size: 0.85rem;
 }
 
-.slide-h {
+/*
+  The body has `ig-typography`, whose `.ig-typography h1…h6` / `.ig-typography p` rules (type + class) set the
+  theme's type scale, margins included. The deck's own text styles are qualified with their element so they
+  rank above those (and still below a slide's scoped overrides, e.g. `.hero-h`).
+*/
+.slide-h:is(h1, h2, h3, h4, h5, h6) {
     margin: 0;
     font-size: clamp(2rem, 3.4vw, 3.4rem);
     line-height: 1.05;
     font-weight: 700;
+    letter-spacing: normal;
 }
 
 .slide-h .accent {
@@ -154,11 +160,12 @@ kbd {
     color: var(--ig-primary-300);
 }
 
-.lead {
+p.lead {
     margin: 0;
     font-size: clamp(1rem, 1.25vw, 1.3rem);
     color: var(--text-muted);
     line-height: 1.45;
+    letter-spacing: normal;
 }
 
 .points {

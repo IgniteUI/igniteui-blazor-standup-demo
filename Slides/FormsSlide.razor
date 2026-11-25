@@ -74,8 +74,8 @@
                 </div>
                 <IgbCardHeader>
                     <IgbAvatar forms-slide slot="thumbnail" Shape="AvatarShape.Circle" Initials="@Initials" class="badge-avatar" />
-                    <h3 slot="title">@(string.IsNullOrWhiteSpace(model.Name) ? "Your name" : model.Name)</h3>
-                    <h5 slot="subtitle">@TrackLabel</h5>
+                    <span slot="title">@(string.IsNullOrWhiteSpace(model.Name) ? "Your name" : model.Name)</span>
+                    <span slot="subtitle">@TrackLabel</span>
                 </IgbCardHeader>
                 <IgbCardContent>
                     <div class="badge-meta">

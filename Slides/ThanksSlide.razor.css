@@ -45,6 +45,10 @@
 
 .qr-tile h3 {
     margin: 12px 0 4px;
+    font-size: 1.17em;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: inherit;
 }
 
 .qr-tile a {

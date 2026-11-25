@@ -117,6 +117,8 @@ igc-grid {
 .empty {
     margin: 0;
     padding: 14px 16px;
+    font: inherit;
+    letter-spacing: inherit;
 }
 
 igc-avatar.buy {

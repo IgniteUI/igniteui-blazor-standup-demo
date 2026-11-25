@@ -37,6 +37,8 @@
 .tab-note {
     margin: 10px 0 0;
     font-size: 0.9rem;
+    line-height: normal;
+    letter-spacing: normal;
 }
 
 /* Same badge as the skill tags (app.css .component-tags igc-badge), in the secondary color for "not yet" */
