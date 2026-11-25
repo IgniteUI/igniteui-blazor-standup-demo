@@ -1,0 +1,41 @@
+.slide-demo .code {
+    font-size: clamp(0.72rem, 0.82vw, 0.88rem);
+}
+
+code {
+    color: var(--ig-primary-200);
+}
+
+.families {
+    display: grid;
+    gap: 14px;
+}
+
+.family {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+}
+
+.family-name {
+    padding-top: 2px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+/* Each family in its own palette hue (see the shared .component-tags rule in app.css) */
+igc-badge.layout {
+    --tag-text-color: var(--ig-secondary-300);
+    --tag-border-color: var(--ig-secondary-800);
+}
+
+igc-badge.charts {
+    --tag-text-color: var(--ig-success-300);
+    --tag-border-color: var(--ig-success-800);
+}
+
+igc-badge.gauges {
+    --tag-text-color: var(--ig-warn-300);
+    --tag-border-color: var(--ig-warn-800);
+}

@@ -3,8 +3,11 @@ using StandupDemo.Slides;
 
 namespace StandupDemo.Deck;
 
-/// <summary>A single slide in the deck: its URL slug, nav title, component and speaker notes.</summary>
-public sealed record SlideInfo(string Slug, string Title, string Icon, Type Component, string Notes);
+/// <summary>
+/// A single slide in the deck: its URL slug, nav title, component and speaker notes.
+/// <paramref name="Commercial"/> marks slides that show the commercial IgniteUI.Blazor package rather than the MIT ones.
+/// </summary>
+public sealed record SlideInfo(string Slug, string Title, string Icon, Type Component, string Notes, bool Commercial = false);
 
 /// <summary>
 /// The deck's running order. Reorder, add or drop slides here.
@@ -35,6 +38,21 @@ public sealed class SlideRegistry
                 "Theming is plain CSS custom properties. Theme Provider switches Material / Bootstrap / Fluent / Indigo for one region at runtime. Palette presets: the Ignite UI brand palette, each design system's stock palette, or Custom colors. Roundness, spacing and size start at each theme's defaults; flip the switch to override them. The palettes came from the igniteui-theming MCP."),
             new("ai", "AI-ready", "chat", typeof(AiSlide),
                 "Chat (preview) as an assistant UI: suggestions, typing indicator, client-side templates. On the right: install the Agent Skills with `gh skill install IgniteUI/igniteui-blazor`, or use `ig ai-config`, which also adds agent rules (AGENTS.md etc.) and the MCP servers. Coming soon: Figma to code. This deck was built with them."),
+            new("upgrade", "Going further", "upgrade", typeof(UpgradeSlide),
+                "When an app outgrows Lite: the commercial IgniteUI.Blazor. New in 26.2 (beta on NuGet as IgniteUI.Blazor.Trial): it builds on IgniteUI.Blazor.Lite, it's a package dependency. So nothing gets replaced: same namespace, same AddIgniteUIBlazor(), same theme, and every Lite component and Grid Lite keep working. You add one PackageReference and the grid stylesheet. The next slides run on the Trial package, right next to the MIT components in this deck.",
+                Commercial: true),
+            new("grid", "Grid", "table", typeof(GridSlide),
+                $"The upgrade from Grid Lite: IgbGrid, same {GridSlide.RowCount:N0} employees. Grouped by department with the group area, salary and rating summaries per group, multi-row selection, row editing from the action strip, row pinning, column pinning and hiding from the toolbar, Excel-style filtering, export to Excel/CSV. The Rating column is a Lite IgbRating in a Blazor cell template. The side panel uses the grid API: GroupByAsync, SelectRowsAsync; the counters come from its RowSelectionChanging and RowEditDone events.",
+                Commercial: true),
+            new("grid-family", "Tree, hierarchical, pivot", "account_tree", typeof(GridFamilySlide),
+                "The rest of the grid family, same column API. Tree Grid: an org chart from flat data with ManagerId as the ForeignKey, summaries per level. Hierarchical Grid: country, then department, then people, each level its own schema through row islands. Pivot Grid: salary by department and country; drag dimensions in the data selector on the left to reshape it.",
+                Commercial: true),
+            new("perf-charts", "High-performance charts", "speed", typeof(PerfChartsSlide),
+                "65+ chart types. Top: one million points, generated in the browser and handed over through DataSourceScript, so they never cross the .NET/JS boundary. Zoom with the mouse wheel or drag, it stays smooth. Bottom: a live feed driven from C#: a PeriodicTimer appends a point and calls NotifyInsertItemAsync / NotifyRemoveItemAsync, so only the change goes to the chart.",
+                Commercial: true),
+            new("dock-manager", "Dock Manager", "view_quilt", typeof(DockManagerSlide),
+                "Dock Manager: an IDE-style workspace. Drag a pane header to dock it anywhere, drop it outside to float it, pin and unpin, maximize, tabs in the document host. Picking a ticker in the watchlist grid drives the financial chart. The order ticket is all Lite components. Save the layout with GetCurrentLayoutAsync, mess it up, restore it.",
+                Commercial: true),
             new("thanks", "Thank you", "star", typeof(ThanksSlide),
                 "Thanks! Star the repos, file issues, send PRs. The QR codes go to both repos."),
         ];

@@ -27,12 +27,20 @@
     <None Update="Slides/DashboardSlide.razor.css" CssScope="dashboard-slide" />
     <None Update="Slides/ThemingSlide.razor.css" CssScope="theming-slide" />
     <None Update="Slides/AiSlide.razor.css" CssScope="ai-slide" />
+    <None Update="Slides/UpgradeSlide.razor.css" CssScope="upgrade-slide" />
+    <None Update="Slides/GridSlide.razor.css" CssScope="grid-slide" />
+    <None Update="Slides/GridFamilySlide.razor.css" CssScope="grid-family-slide" />
+    <None Update="Slides/PerfChartsSlide.razor.css" CssScope="perf-charts-slide" />
+    <None Update="Slides/DockManagerSlide.razor.css" CssScope="dock-slide" />
     <None Update="Slides/ThanksSlide.razor.css" CssScope="thanks-slide" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="IgniteUI.Blazor.Lite" Version="1.0.0" />
+    <PackageReference Include="IgniteUI.Blazor.Lite" Version="1.0.1" />
     <PackageReference Include="IgniteUI.Blazor.GridLite" Version="1.0.0" />
+    <!-- The commercial product (evaluation build) for the "Going further" slides. Since 26.2 it builds on
+         IgniteUI.Blazor.Lite (a package dependency), so it sits next to Lite and Grid Lite. -->
+    <PackageReference Include="IgniteUI.Blazor.Trial" Version="26.2.16-beta.0" />
     <PackageReference Include="Blazor-ApexCharts" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.8" PrivateAssets="all" />

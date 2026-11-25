@@ -1,0 +1,112 @@
+<div class="slide-stack">
+    <header class="slide-head">
+        <div>
+            <span class="kicker">IgniteUI.Blazor · Dock Manager</span>
+            <h1 class="slide-h">An <span class="accent">IDE-style workspace</span>: dock, float, pin, tab</h1>
+        </div>
+        <div class="row">
+            <IgbButton Variant="ButtonVariant.Outlined" @onclick="SaveLayoutAsync">
+                <IgbIcon slot="prefix" IconName="save" Collection="@Icons.Collection" /> Save layout
+            </IgbButton>
+            <IgbButton Variant="ButtonVariant.Outlined" Disabled="@(savedLayout is null)" @onclick="RestoreLayoutAsync">
+                <IgbIcon slot="prefix" IconName="undo" Collection="@Icons.Collection" /> Restore
+            </IgbButton>
+            <IgbButton Variant="ButtonVariant.Flat" @onclick="ResetLayout">
+                <IgbIcon slot="prefix" IconName="refresh" Collection="@Icons.Collection" /> Reset
+            </IgbButton>
+        </div>
+    </header>
+
+    <div class="dock-host">
+        <IgbDockManager dock-slide @ref="dockManager" Layout="layout" LayoutChanged="OnLayoutChanged" Width="100%" Height="100%">
+            <div slot="watchlist" class="pane">
+                <IgbGrid dock-slide Data="Market.Watchlist" PrimaryKey="@nameof(Ticker.Symbol)" AutoGenerate="false"
+                         Width="100%" Height="100%" RowSelection="GridSelectionMode.Single" HideRowSelectors="true"
+                         SelectedRows="selectedRows" RowSelectionChanging="OnTickerSelected">
+                    <IgbColumn Field="@nameof(Ticker.Symbol)" Header="Symbol" DataType="GridColumnDataType.String" Sortable="true" Width="100px" />
+                    <IgbColumn Field="@nameof(Ticker.Price)" Header="Price" DataType="GridColumnDataType.Currency" Sortable="true" Width="100px" />
+                    @* Client-side template (wwwroot/js/templates.js): formatting only, no round trip to .NET *@
+                    <IgbColumn Field="@nameof(Ticker.Change)" Header="Day" DataType="GridColumnDataType.Percent" Sortable="true"
+                               BodyTemplateScript="WatchlistChange" />
+                </IgbGrid>
+            </div>
+
+            <div slot="chart" class="pane">
+                <IgbFinancialChart DataSource="Market.History[symbol]" ChartType="FinancialChartType.Candle" Width="100%" Height="100%"
+                                   VolumeType="FinancialChartVolumeType.Column" ZoomSliderType="FinancialChartZoomSliderType.Line"
+                                   IncludedProperties="candleProperties" ChartTitle="@($"{SelectedTicker.Symbol} · {SelectedTicker.Name}")"
+                                   TitleTextColor="#E6E6F5" Brushes="#7EE2B8" Outlines="#7EE2B8"
+                                   NegativeBrushes="#F05A2B" NegativeOutlines="#F05A2B"
+                                   VolumeBrushes="#0099FF" VolumeOutlines="#0099FF" IsToolbarVisible="false"
+                                   XAxisLabelTextColor="@AxisText" YAxisLabelTextColor="@AxisText"
+                                   XAxisStroke="@AxisLine" YAxisStroke="@AxisLine"
+                                   XAxisMajorStroke="transparent" YAxisMajorStroke="@GridLine" ZoomSliderXAxisMajorStroke="transparent" />
+            </div>
+
+            <div slot="allocation" class="pane allocation">
+                <div class="ring">
+                    <IgbDoughnutChart InnerExtent="0.62" Width="100%" Height="100%" AllowSliceSelection="false">
+                        <IgbRingSeries DataSource="Market.Allocation" LabelMemberPath="@nameof(SectorSlice.Sector)" ValueMemberPath="@nameof(SectorSlice.Value)"
+                                       Brushes="@SliceColors" Outlines="@SliceOutlines"
+                                       LabelsPosition="LabelsPosition.OutsideEnd" LabelOuterColor="#E6E6F5" />
+                    </IgbDoughnutChart>
+                    <div class="ring-center">
+                        <span class="muted">Holdings</span>
+                        <b>@PortfolioValue.ToString("C0")</b>
+                    </div>
+                </div>
+            </div>
+
+            <div slot="ticket" class="pane ticket">
+                <div class="quote">
+                    <b>@SelectedTicker.Symbol</b>
+                    <span class="muted">@SelectedTicker.Name</span>
+                    <span class="spacer"></span>
+                    <b class="price">@SelectedTicker.Price.ToString("C")</b>
+                </div>
+                <IgbButtonGroup Selection="ButtonGroupSelection.SingleRequired" Select="OnSide">
+                    <IgbToggleButton Value="Buy" Selected="true">Buy</IgbToggleButton>
+                    <IgbToggleButton Value="Sell">Sell</IgbToggleButton>
+                </IgbButtonGroup>
+                <IgbInput Label="Quantity" DisplayType="InputType.Number" Min="1" @bind-Value="quantity" />
+                <IgbSelect Label="Order type" @bind-Value="orderType">
+                    <IgbSelectItem Value="@("Market")">Market</IgbSelectItem>
+                    <IgbSelectItem Value="@("Limit")">Limit</IgbSelectItem>
+                </IgbSelect>
+                @if (orderType == "Limit")
+                {
+                    <IgbInput Label="Limit price" DisplayType="InputType.Number" Min="0" Step="0.01" @bind-Value="limitPrice" />
+                }
+                <div class="estimate">
+                    <span class="muted">Estimated @side.ToLowerInvariant()</span>
+                    <b>@Estimate.ToString("C")</b>
+                </div>
+                <IgbButton Variant="ButtonVariant.Contained" Disabled="@(Quantity <= 0)" @onclick="PlaceOrderAsync">
+                    @side @Quantity.ToString("N0") @SelectedTicker.Symbol
+                </IgbButton>
+            </div>
+
+            <div slot="activity" class="pane activity">
+                @if (orders.Count == 0)
+                {
+                    <p class="muted empty">No orders yet. Place one from the order ticket.</p>
+                }
+                else
+                {
+                    <IgbList>
+                        @foreach (var order in orders)
+                        {
+                            <IgbListItem>
+                                <IgbAvatar slot="start" Shape="AvatarShape.Rounded" Initials="@order.Side[..1]" class="@order.Side.ToLowerInvariant()" dock-slide />
+                                <span slot="title">@order.Side @order.Quantity.ToString("N0") @order.Symbol</span>
+                                <span slot="subtitle">@order.Type · @order.Total.ToString("C") · @order.Time.ToString("HH:mm:ss")</span>
+                            </IgbListItem>
+                        }
+                    </IgbList>
+                }
+            </div>
+        </IgbDockManager>
+    </div>
+</div>
+
+<IgbToast @ref="toast" DisplayTime="2000">@toastMessage</IgbToast>

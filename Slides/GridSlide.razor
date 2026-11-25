@@ -1,0 +1,99 @@
+<div class="slide-stack">
+    <header class="slide-head">
+        <div>
+            <span class="kicker">IgniteUI.Blazor · Grid</span>
+            <h1 class="slide-h">From Grid Lite to <span class="accent">IgbGrid</span>: same data, everything else</h1>
+        </div>
+        <div class="stats">
+            <div><span class="stat">@selectedCount.ToString("N0")</span><span class="muted">selected</span></div>
+            <div><span class="stat">@editCount.ToString("N0")</span><span class="muted">rows edited</span></div>
+        </div>
+    </header>
+
+    <div class="grid-body">
+        <aside class="panel controls">
+            <div class="panel-title"><IgbIcon IconName="code" Collection="@Icons.Collection" /> Driven through the grid API</div>
+
+            <div class="field">
+                <label>Group by (or drag a header to the group area)</label>
+                <div class="row chips">
+                    @foreach (var f in groupableFields)
+                    {
+                        var field = f;
+                        <IgbChip Selectable="true" @bind-Selected:get="grouped.Contains(field)" @bind-Selected:set="(bool on) => ToggleGroupAsync(field, on)">@field</IgbChip>
+                    }
+                </div>
+                <IgbButton Variant="ButtonVariant.Flat" Disabled="@(grouped.Count == 0)" @onclick="ToggleGroupRowsAsync">Expand / collapse groups</IgbButton>
+            </div>
+
+            <div class="field">
+                <label>Filtering UI</label>
+                <IgbButtonGroup Selection="ButtonGroupSelection.SingleRequired" Select="OnFilterMode">
+                    <IgbToggleButton Value="quick" Selected="true">Filter row</IgbToggleButton>
+                    <IgbToggleButton Value="excel">Excel style</IgbToggleButton>
+                </IgbButtonGroup>
+            </div>
+
+            <IgbSwitch @bind-Checked="summaries">Salary &amp; rating summaries</IgbSwitch>
+
+            <div class="field">
+                <label>Selection</label>
+                <div class="row">
+                    <IgbButton Variant="ButtonVariant.Outlined" @onclick="SelectTopEarnersAsync">Select top 25 earners</IgbButton>
+                    <IgbButton Variant="ButtonVariant.Flat" Disabled="@(selectedCount == 0)" @onclick="ClearSelectionAsync">Clear</IgbButton>
+                </div>
+            </div>
+
+            <p class="muted tip">
+                Also in the grid: hover a row for the action strip (edit, delete, pin the row), and the toolbar for
+                column hiding, column pinning, advanced filtering and Excel / CSV export.
+            </p>
+        </aside>
+
+        <div class="grid-host">
+            <IgbGrid grid-slide @ref="grid" Data="people" PrimaryKey="@nameof(Employee.Id)" AutoGenerate="false"
+                     Width="100%" Height="100%"
+                     AllowFiltering="true" FilterMode="filterMode" AllowAdvancedFiltering="true"
+                     GroupingExpressions="initialGrouping" GroupingDone="OnGroupingDone" GroupsExpanded="false"
+                     ShowSummaryOnCollapse="true" SummaryCalculationMode="SummaryMode"
+                     RowSelection="GridSelectionMode.Multiple" RowSelectionChanging="OnRowSelectionChanging"
+                     RowEditable="true" RowEditDone="OnRowEditDone">
+                <IgbGridToolbar>
+                    <IgbGridToolbarTitle>Employees</IgbGridToolbarTitle>
+                    <IgbGridToolbarActions>
+                        <IgbGridToolbarHiding />
+                        <IgbGridToolbarPinning />
+                        <IgbGridToolbarAdvancedFiltering />
+                        <IgbGridToolbarExporter ExportExcel="true" ExportCSV="true" Filename="employees" />
+                    </IgbGridToolbarActions>
+                </IgbGridToolbar>
+
+                <IgbColumn Field="@nameof(Employee.Name)" Header="Name" DataType="GridColumnDataType.String"
+                           Pinned="true" Sortable="true" Resizable="true" Editable="true" />
+                <IgbColumn Field="@nameof(Employee.Title)" Header="Title" DataType="GridColumnDataType.String"
+                           Sortable="true" Groupable="true" Editable="true" />
+                <IgbColumn Field="@nameof(Employee.Department)" Header="Department" DataType="GridColumnDataType.String"
+                           Sortable="true" Groupable="true" Editable="true" />
+                <IgbColumn Field="@nameof(Employee.Country)" Header="Country" DataType="GridColumnDataType.String"
+                           Sortable="true" Groupable="true" Editable="true" />
+                <IgbColumn Field="@nameof(Employee.Salary)" Header="Salary" DataType="GridColumnDataType.Currency"
+                           Sortable="true" Editable="true" HasSummary="summaries" />
+                <IgbColumn Field="@nameof(Employee.Rating)" Header="Rating" DataType="GridColumnDataType.Number"
+                           Sortable="true" Editable="true" HasSummary="summaries">
+                    <BodyTemplate>
+                        @* A Lite component inside a commercial grid cell *@
+                        <IgbRating grid-slide class="cell-rating" Value="@ToRating(context.Cell.Value)" Max="5" ReadOnly="true" />
+                    </BodyTemplate>
+                </IgbColumn>
+                <IgbColumn Field="@nameof(Employee.Remote)" Header="Remote" DataType="GridColumnDataType.Boolean"
+                           Sortable="true" Editable="true" />
+                <IgbColumn Field="@nameof(Employee.Hired)" Header="Hired" DataType="GridColumnDataType.String" Sortable="true" />
+
+                <IgbActionStrip>
+                    <IgbGridPinningActions />
+                    <IgbGridEditingActions />
+                </IgbActionStrip>
+            </IgbGrid>
+        </div>
+    </div>
+</div>

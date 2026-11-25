@@ -10,7 +10,14 @@
                        aria-label="Slides" Command="--toggle" Commandfor="slide-menu" />
         <img class="logo" src="img/ignite-ui.png" alt="Ignite UI" />
         <span class="brand">Ignite UI <strong>for Blazor</strong></span>
-        <IgbChip deck class="oss-chip" Variant="StyleVariant.Success">MIT · Open Source</IgbChip>
+        @if (Current.Commercial)
+        {
+            <IgbChip deck class="oss-chip" Variant="StyleVariant.Warning">Commercial · IgniteUI.Blazor</IgbChip>
+        }
+        else
+        {
+            <IgbChip deck class="oss-chip" Variant="StyleVariant.Success">MIT · Open Source</IgbChip>
+        }
         <span class="slide-title">@Current.Title</span>
         <span class="spacer"></span>
         <IgbIconButton IconName="notes" Collection="@Icons.Collection" Variant="IconButtonVariant.Flat"

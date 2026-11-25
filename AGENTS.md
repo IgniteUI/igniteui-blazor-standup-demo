@@ -66,11 +66,12 @@ You are an expert in C#, Blazor, and scalable web application development. You w
 ## This project
 
 A slide deck for the Blazor Community Standup, built as a standalone Blazor WebAssembly app (.NET 10) on `IgniteUI.Blazor.Lite` + `IgniteUI.Blazor.GridLite` 1.0.
+The "Going further" slides (`upgrade`, `grid`, `grid-family`, `perf-charts`, `dock-manager`) show the commercial product through `IgniteUI.Blazor.Trial` 26.2 (beta). From 26.2 it depends on `IgniteUI.Blazor.Lite` (1.0.1+), so here it is referenced next to Lite and Grid Lite on purpose; this is the one exception to the "don't mix packages" rule above.
 
-- Slide order, titles, icons and speaker notes live in `Deck/SlideRegistry.cs`. Each slide is a component in `Slides/`.
+- Slide order, titles, icons and speaker notes live in `Deck/SlideRegistry.cs`. Each slide is a component in `Slides/`. Slides built on the commercial package set `Commercial: true`, which switches the deck bar chip.
 - Blazor-ApexCharts components (the ApexCharts slide and the dashboard chart tile) live in `Charts/`.
 - Presenters (name, GitHub handle, avatar) for the title and thank-you slides are in `Deck/Presenters.cs`; avatars are `wwwroot/img/<first>-<last>.jpg`.
-- Theme: Material dark (`index.html`). Brand palette: `wwwroot/css/ig-palette.css`, generated with the igniteui-theming MCP (`create_palette` + `create_custom_palette` brand pins). Regenerate it rather than hand-editing shades. `lab-palettes.css` holds the stock design-system palettes, scoped to the Theming slide preview.
+- Theme: Material dark (`index.html`), plus the commercial grid theme (`themes/grid/dark/material.css`), which sets the stock palette on `:root` and so must load before `ig-palette.css`. Brand palette: `wwwroot/css/ig-palette.css`, generated with the igniteui-theming MCP (`create_palette` + `create_custom_palette` brand pins). Regenerate it rather than hand-editing shades. `lab-palettes.css` holds the stock design-system palettes, scoped to the Theming slide preview.
 - `.theme-showcase` regions (Getting started step 3, Theming preview) must show the built-in themes' real defaults: no deck-level token tweaks inside them (reset such tokens with `initial` there).
 - Agent setup: instructions live in this `AGENTS.md` (`.claude/CLAUDE.md` imports it with `@../AGENTS.md`). Ignite UI skills are installed under `.agents/skills/` (`gh skill install IgniteUI/igniteui-blazor --all --agent universal`) and linked per skill into `.claude/skills/` for Claude Code; update them there and keep the links. MCP servers are configured in `.mcp.json` and `.vscode/mcp.json`.
 
@@ -84,3 +85,13 @@ A slide deck for the Blazor Community Standup, built as a standalone Blazor WebA
 - Theme previews are an `IgbThemeProvider` bound to the picked theme/variant, inside a `.theme-showcase` with `data-theme` / `data-variant`, which picks up `showcase-typography.css` and the palettes in `lab-palettes.css`.
 - `igc-grid-lite` is sized by its container (a grid or flex parent); its own `display` is left alone.
 - Grid Lite state is bound, not imperative: `FilterExpressions` / `SortingExpressions` come from the slide's state, and `Filtered` / `Sorted` write grid-UI changes back into it.
+
+Commercial (`IgniteUI.Blazor`) components:
+
+- They render a wrapper element: `class` lands on the wrapper, while the CSS scope attribute lands on the `igc-*` element. Style them in the scoped CSS by element (`igc-grid { … }`, `igc-dockmanager { … }`), not by class.
+- The Dock Manager is themed with its own `--igc-*` variables (see `DockManagerSlide.razor.css`); charts take resolved colors as parameters (`Brushes`, `*LabelTextColor`, …), not CSS tokens.
+- Settings objects built in C# (`IgbGroupingExpression`, `IgbPivotConfiguration`, the Dock Manager layout) are wrapped in `#pragma warning disable BL0005`, as the docs build them.
+- Formatting-only cells use a client template (`BodyTemplateScript`, registered in `wwwroot/js/templates.js` through Lite's `api.js`, which the commercial package resolves `*Script` names through too); a Razor `BodyTemplate` is for cells that host Blazor components.
+- Large chart data is generated in the browser and handed over by name with `DataSourceScript` (`wwwroot/js/chart-data.js`); live chart updates send only the change with `NotifyInsertItemAsync` / `NotifyRemoveItemAsync`.
+- `RowSelectionChanging`'s `NewSelection` holds the bound row items (e.g. the `Ticker` instances), not primary keys.
+- After changing an Ignite UI package version, clean `obj/` (or at least `obj/<config>/net10.0/webcil`) if the browser reports a `MissingMethodException`: an incremental build can keep a stale webcil copy when the new package's DLL has an older timestamp.

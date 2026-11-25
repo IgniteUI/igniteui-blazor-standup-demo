@@ -1,0 +1,130 @@
+.dock-host {
+    flex: 1;
+    min-height: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    box-shadow: 0 12px 40px rgb(0 0 0 / 0.25);
+}
+
+/* The Dock Manager is themed through its own --igc-* variables; these map them onto the deck's dark surfaces.
+   Commercial components take the CSS scope attribute on the igc-* element, while class goes to a wrapper element. */
+igc-dockmanager {
+    --igc-font-family: var(--font-body);
+    --igc-background-color: var(--surface-3);
+    --igc-accent-color: var(--surface-3);
+    --igc-active-color: var(--brand-orange);
+    --igc-border-color: var(--line);
+    --igc-dock-background: var(--surface-0);
+    --igc-dock-text: var(--text);
+    --igc-pane-header-background: var(--surface-2);
+    --igc-pane-header-text: var(--text);
+    --igc-pane-content-background: var(--surface-1);
+    --igc-pane-content-text: var(--text);
+    --igc-tab-text: var(--text-muted);
+    --igc-tab-background: var(--surface-2);
+    --igc-tab-border-color: var(--line);
+    --igc-tab-text-active: var(--text);
+    --igc-tab-background-active: var(--surface-1);
+    --igc-tab-border-color-active: var(--brand-orange);
+    --igc-unpinned-header-background: var(--surface-2);
+    --igc-unpinned-header-text: var(--text);
+    --igc-splitter-background: var(--surface-0);
+    --igc-splitter-handle: var(--ig-gray-400);
+    --igc-button-text: var(--text-muted);
+    --igc-flyout-shadow-color: rgb(0 0 0 / 0.5);
+    --igc-joystick-background: var(--surface-2);
+    --igc-joystick-border-color: var(--line);
+    --igc-joystick-icon-color: var(--text);
+    --igc-joystick-background-active: var(--brand-blue);
+    --igc-joystick-icon-color-active: #fff;
+    --igc-floating-pane-border-color: var(--line);
+    --igc-context-menu-background: var(--surface-3);
+    --igc-context-menu-background-active: var(--surface-2);
+    --igc-context-menu-color: var(--text);
+    --igc-context-menu-color-active: var(--text);
+    --igc-drop-shadow-background: rgb(0 153 255 / 0.25);
+    --igc-disabled-color: var(--ig-gray-400);
+    display: block;
+}
+
+/* Pane bodies: each slotted element fills its pane */
+.pane {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+
+igc-grid {
+    --ig-size: var(--ig-size-small);
+}
+
+.allocation {
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    padding: 16px;
+}
+
+.ring {
+    position: relative;
+    min-height: 0;
+}
+
+.ring-center {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 2px;
+    pointer-events: none;
+}
+
+.ring-center b {
+    font-size: 1.6rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.ticket {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 14px 16px;
+    overflow: auto;
+}
+
+.quote {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.quote .price {
+    font-size: 1.25rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.estimate {
+    display: flex;
+    justify-content: space-between;
+    font-variant-numeric: tabular-nums;
+}
+
+.activity {
+    overflow: auto;
+}
+
+.empty {
+    margin: 0;
+    padding: 14px 16px;
+}
+
+igc-avatar.buy {
+    --ig-avatar-background: #1f6f55;
+    --ig-avatar-color: #fff;
+}
+
+igc-avatar.sell {
+    --ig-avatar-background: #8f3a20;
+    --ig-avatar-color: #fff;
+}

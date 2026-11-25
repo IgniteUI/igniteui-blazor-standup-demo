@@ -12,6 +12,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
     <!-- Exactly one Ignite UI theme. Lite's theme also covers Grid Lite. -->
     <link rel="stylesheet" href="_content/IgniteUI.Blazor/themes/dark/material.css" />
+    <!-- Commercial grids (IgniteUI.Blazor.Trial) add their own theme. It also sets the stock palette on :root,
+         so it goes before the brand palette below. -->
+    <link rel="stylesheet" href="_content/IgniteUI.Blazor/themes/grid/dark/material.css" />
     <!-- Brand palette generated with the igniteui-theming MCP (create_custom_palette) -->
     <link rel="stylesheet" href="css/ig-palette.css" />
     <!-- Stock design-system palettes, scoped to the Theming slide preview -->
@@ -37,6 +40,7 @@
         <span class="dismiss">🗙</span>
     </div>
     <script type="module" src="js/templates.js"></script>
+    <script type="module" src="js/chart-data.js"></script>
     <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
 </body>
 

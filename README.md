@@ -6,6 +6,10 @@ Blazor WebAssembly app. Every slide is made of **IgniteUI.Blazor.Lite** ([NuGet]
 [GitHub](https://github.com/IgniteUI/IgniteUI.Blazor.GridLite)) components (both MIT, 1.0), with
 [Blazor-ApexCharts](https://github.com/apexcharts/Blazor-ApexCharts) for the charts.
 
+The "Going further" slides show what the commercial **IgniteUI.Blazor** adds (grids, Dock Manager, high-performance charts).
+They run on [IgniteUI.Blazor.Trial](https://www.nuget.org/packages/IgniteUI.Blazor.Trial) 26.2 (beta), which builds on
+IgniteUI.Blazor.Lite, so it sits next to the MIT packages in the same app. The trial build watermarks its grids and charts.
+
 **See it live: [igniteui.github.io/igniteui-blazor-standup-demo](https://igniteui.github.io/igniteui-blazor-standup-demo/)**
 
 ## Run it
@@ -42,7 +46,12 @@ Every slide has its own URL (`/grid-lite`, `/theming`, …), and the deck scales
 | 7 | Dashboard: drag, resize, save and restore the layout | Tile Manager, Calendar, List, Carousel, Grid Lite, progress indicators |
 | 8 | Theming: design systems, palettes and layout tokens | Theme Provider, Color Picker, Slider, Button Group |
 | 9 | AI-ready: Agent Skills (`gh skill install` or `ig ai-config`), MCP servers | Chat (preview), Tabs |
-| 10 | Thank you: repo QR codes, presenters, links to this deck (live and source) | Card, QR Code, Avatar |
+| 10 | Going further: upgrading from Lite to the commercial IgniteUI.Blazor in place | Badge |
+| 11 | Grid: the Grid Lite employees in IgbGrid, with grouping, summaries, selection, row editing, pinning, toolbar and export | Grid, Rating (in a cell template), Chip, Button Group, Switch |
+| 12 | Tree, hierarchical and pivot grids: an org chart, country → department → people, salary by department and country | Tree Grid, Hierarchical Grid, Pivot Grid, Pivot Data Selector, Button Group |
+| 13 | High-performance charts: a million points from the browser with zoom, and a live feed driven from C# | Category Chart, Button Group, Icon Button |
+| 14 | Dock Manager: a trading workspace with save / restore of the layout | Dock Manager, Grid, Financial Chart, Doughnut Chart, Input, Select, List, Toast |
+| 15 | Thank you: repo QR codes, presenters, links to this deck (live and source) | Card, QR Code, Avatar |
 
 Slide order, titles and speaker notes live in `Deck/SlideRegistry.cs`; each slide is a component in `Slides/`
 (the chart components are in `Charts/`).

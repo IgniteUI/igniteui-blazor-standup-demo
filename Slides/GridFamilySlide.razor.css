@@ -1,0 +1,42 @@
+.slide-head {
+    align-items: center;
+}
+
+.lead {
+    margin-top: -6px;
+}
+
+.family-body {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+}
+
+.family-body.pivot {
+    grid-template-columns: minmax(240px, 280px) minmax(0, 1fr);
+}
+
+/* A plain grid cell: its stretched height is definite, so the grid's Height="100%" resolves against it */
+.grid-host {
+    min-width: 0;
+    min-height: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    box-shadow: 0 12px 40px rgb(0 0 0 / 0.25);
+}
+
+.selector {
+    min-height: 0;
+    overflow: auto;
+    padding: 8px;
+}
+
+/* The scope attribute is on the igc-* element itself; class goes to a wrapper element */
+igc-tree-grid,
+igc-hierarchical-grid,
+igc-pivot-grid {
+    --ig-size: var(--ig-size-medium);
+}

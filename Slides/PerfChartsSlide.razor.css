@@ -1,0 +1,78 @@
+.stats {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.stats > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.stat {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--brand-orange);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+}
+
+.charts-body {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-rows: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 16px;
+}
+
+.chart-panel {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px 18px;
+}
+
+.chart-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.chart-head .panel-title {
+    margin: 0;
+}
+
+.hint {
+    font-size: 0.85rem;
+}
+
+/* Charts need an explicit size: the host is the flex item, the chart fills it at 100% */
+.chart-host {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+}
+
+.legend {
+    display: flex;
+    gap: 18px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.key::before {
+    content: "";
+    display: inline-block;
+    width: 14px;
+    height: 3px;
+    margin-right: 6px;
+    vertical-align: middle;
+    border-radius: 2px;
+    background: var(--key-color);
+}
+
+.key.cpu { --key-color: #0099FF; }
+.key.memory { --key-color: #F05A2B; }
+.key.network { --key-color: #7EE2B8; }

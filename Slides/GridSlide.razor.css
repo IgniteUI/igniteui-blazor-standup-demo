@@ -1,0 +1,64 @@
+.stats {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.stats > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.stat {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--brand-orange);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+}
+
+.grid-body {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: 20px;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    overflow: auto;
+}
+
+.controls .field igc-button {
+    align-self: flex-start;
+}
+
+.tip {
+    margin: auto 0 0;
+    font-size: 0.85rem;
+    line-height: 1.45;
+}
+
+/* A plain grid cell: its stretched height is definite, so the grid's Height="100%" resolves against it */
+.grid-host {
+    min-width: 0;
+    min-height: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    box-shadow: 0 12px 40px rgb(0 0 0 / 0.25);
+}
+
+/* The scope attribute is on igc-grid itself; class goes to a wrapper element */
+igc-grid {
+    --ig-size: var(--ig-size-medium);
+}
+
+igc-rating.cell-rating {
+    --ig-size: var(--ig-size-small);
+    pointer-events: none;
+}

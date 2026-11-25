@@ -1,0 +1,74 @@
+@implements IAsyncDisposable
+
+<div class="slide-stack">
+    <header class="slide-head">
+        <div>
+            <span class="kicker">IgniteUI.Blazor · Charts</span>
+            <h1 class="slide-h"><span class="accent">@selected.Label points</span>, zoom and pan, live feeds</h1>
+        </div>
+        <div class="stats">
+            <div><span class="stat">@selected.Count.ToString("N0")</span><span class="muted">points in one series</span></div>
+            <div><span class="stat">@updatesPerSecond</span><span class="muted">live updates / s</span></div>
+        </div>
+    </header>
+
+    <div class="charts-body">
+        <section class="panel chart-panel">
+            <div class="chart-head">
+                <div class="panel-title"><IgbIcon IconName="speed" Collection="@Icons.Collection" /> High volume · DataSourceScript</div>
+                <span class="muted hint">Mouse wheel or drag to zoom</span>
+                <span class="spacer"></span>
+                <IgbButtonGroup Selection="ButtonGroupSelection.SingleRequired" Select="OnVolume">
+                    @foreach (var option in volumes)
+                    {
+                        <IgbToggleButton Value="@option.Script" Selected="@(option == selected)">@option.Label</IgbToggleButton>
+                    }
+                </IgbButtonGroup>
+            </div>
+            <div class="chart-host">
+                @* Keyed by data set: picking another size creates a fresh chart that asks the browser for that data *@
+                <IgbCategoryChart @key="selected.Script" DataSourceScript="@selected.Script" ChartType="CategoryChartType.Line"
+                                  IncludedProperties="highVolumeProperties" Width="100%" Height="100%"
+                                  Brushes="#0099FF" Outlines="#0099FF" Thickness="1"
+                                  IsHorizontalZoomEnabled="true" IsVerticalZoomEnabled="false"
+                                  CrosshairsDisplayMode="CrosshairsDisplayMode.None" ToolTipType="ToolTipType.Default"
+                                  XAxisEnhancedIntervalPreferMoreCategoryLabels="false" ShouldAutoExpandMarginForInitialLabels="false"
+                                  XAxisLabelTextColor="@AxisText" YAxisLabelTextColor="@AxisText"
+                                  XAxisStroke="@AxisLine" YAxisStroke="@AxisLine" XAxisMajorStroke="transparent" YAxisMajorStroke="@GridLine"
+                                  YAxisLabelLocation="YAxisLabelLocation.OutsideRight" YAxisExtent="48"
+                                  SeriesAdded="HideMarkers" />
+            </div>
+        </section>
+
+        <section class="panel chart-panel">
+            <div class="chart-head">
+                <div class="panel-title"><IgbIcon IconName="trending_up" Collection="@Icons.Collection" /> Live feed · driven from C#</div>
+                <span class="spacer"></span>
+                <IgbButtonGroup Selection="ButtonGroupSelection.SingleRequired" Select="OnRate">
+                    <IgbToggleButton Value="100">10 / s</IgbToggleButton>
+                    <IgbToggleButton Value="33">30 / s</IgbToggleButton>
+                    <IgbToggleButton Value="16" Selected="true">60 / s</IgbToggleButton>
+                </IgbButtonGroup>
+                <IgbIconButton IconName="@(running ? "pause" : "play_arrow")" Collection="@Icons.Collection" Variant="IconButtonVariant.Outlined"
+                               aria-label="@(running ? "Pause the feed" : "Resume the feed")" @onclick="ToggleFeed" />
+            </div>
+            <div class="chart-host">
+                <IgbCategoryChart @ref="liveChart" DataSource="feed" ChartType="CategoryChartType.Line"
+                                  IncludedProperties="liveProperties" Width="100%" Height="100%"
+                                  Brushes="#0099FF #F05A2B #7EE2B8" Outlines="#0099FF #F05A2B #7EE2B8" Thickness="2"
+                                  YAxisMinimumValue="0" YAxisMaximumValue="100" YAxisExtent="48"
+                                  YAxisLabelLocation="YAxisLabelLocation.OutsideRight"
+                                  XAxisIsLabelPanelVisible="false" ToolTipType="ToolTipType.None"
+                                  CrosshairsDisplayMode="CrosshairsDisplayMode.None" IsTransitionInEnabled="false"
+                                  YAxisLabelTextColor="@AxisText" XAxisStroke="@AxisLine" YAxisStroke="@AxisLine"
+                                  XAxisMajorStroke="transparent" YAxisMajorStroke="@GridLine"
+                                  SeriesAdded="HideMarkers" />
+            </div>
+            <div class="legend">
+                <span class="key cpu">CPU</span>
+                <span class="key memory">Memory</span>
+                <span class="key network">Network</span>
+            </div>
+        </section>
+    </div>
+</div>

@@ -1,0 +1,72 @@
+<div class="slide-stack">
+    <header class="slide-head">
+        <div>
+            <span class="kicker">IgniteUI.Blazor · Grid family</span>
+            <h1 class="slide-h">Tree, hierarchical and pivot: <span class="accent">one column API</span></h1>
+        </div>
+        <IgbButtonGroup Selection="ButtonGroupSelection.SingleRequired" Select="OnView">
+            <IgbToggleButton Value="tree" Selected="true">Tree Grid</IgbToggleButton>
+            <IgbToggleButton Value="hierarchical">Hierarchical Grid</IgbToggleButton>
+            <IgbToggleButton Value="pivot">Pivot Grid</IgbToggleButton>
+        </IgbButtonGroup>
+    </header>
+
+    <p class="lead">@Captions[view]</p>
+
+    @* One grid at a time, created when shown, so each measures its own visible container *@
+    <div class="family-body @view" @key="view">
+        @switch (view)
+        {
+            case "tree":
+                <div class="grid-host">
+                    <IgbTreeGrid grid-family-slide Data="orgChart" PrimaryKey="@nameof(OrgMember.Id)" ForeignKey="@nameof(OrgMember.ManagerId)"
+                                 AutoGenerate="false" Width="100%" Height="100%" ExpansionDepth="2"
+                                 RowSelection="GridSelectionMode.MultipleCascade" AllowFiltering="true">
+                        <IgbColumn Field="@nameof(OrgMember.Name)" Header="Name" DataType="GridColumnDataType.String" Sortable="true" />
+                        <IgbColumn Field="@nameof(OrgMember.Title)" Header="Title" DataType="GridColumnDataType.String" Sortable="true" />
+                        <IgbColumn Field="@nameof(OrgMember.Department)" Header="Department" DataType="GridColumnDataType.String" Sortable="true" />
+                        <IgbColumn Field="@nameof(OrgMember.Country)" Header="Country" DataType="GridColumnDataType.String" Sortable="true" />
+                        <IgbColumn Field="@nameof(OrgMember.Salary)" Header="Salary" DataType="GridColumnDataType.Currency" Sortable="true" />
+                    </IgbTreeGrid>
+                </div>
+                break;
+
+            case "hierarchical":
+                <div class="grid-host">
+                    <IgbHierarchicalGrid grid-family-slide Data="byCountry" PrimaryKey="@nameof(CountryRow.Country)"
+                                         AutoGenerate="false" Width="100%" Height="100%" AllowFiltering="true">
+                        <IgbColumn Field="@nameof(CountryRow.Country)" Header="Country" DataType="GridColumnDataType.String" Sortable="true" />
+                        <IgbColumn Field="@nameof(CountryRow.Headcount)" Header="Headcount" DataType="GridColumnDataType.Number" Sortable="true" />
+                        <IgbColumn Field="@nameof(CountryRow.AvgSalary)" Header="Avg salary" DataType="GridColumnDataType.Currency" Sortable="true" />
+
+                        <IgbRowIsland ChildDataKey="@nameof(CountryRow.Departments)" PrimaryKey="@nameof(DepartmentRow.Key)" AutoGenerate="false">
+                            <IgbColumn Field="@nameof(DepartmentRow.Department)" Header="Department" DataType="GridColumnDataType.String" Sortable="true" />
+                            <IgbColumn Field="@nameof(DepartmentRow.Headcount)" Header="Headcount" DataType="GridColumnDataType.Number" Sortable="true" />
+                            <IgbColumn Field="@nameof(DepartmentRow.AvgSalary)" Header="Avg salary" DataType="GridColumnDataType.Currency" Sortable="true" />
+                            <IgbColumn Field="@nameof(DepartmentRow.AvgRating)" Header="Avg rating" DataType="GridColumnDataType.Number" Sortable="true" />
+
+                            <IgbRowIsland ChildDataKey="@nameof(DepartmentRow.People)" PrimaryKey="@nameof(Employee.Id)" AutoGenerate="false"
+                                          RowSelection="GridSelectionMode.Multiple">
+                                <IgbColumn Field="@nameof(Employee.Name)" Header="Name" DataType="GridColumnDataType.String" Sortable="true" />
+                                <IgbColumn Field="@nameof(Employee.Title)" Header="Title" DataType="GridColumnDataType.String" Sortable="true" />
+                                <IgbColumn Field="@nameof(Employee.Salary)" Header="Salary" DataType="GridColumnDataType.Currency" Sortable="true" HasSummary="true" />
+                                <IgbColumn Field="@nameof(Employee.Rating)" Header="Rating" DataType="GridColumnDataType.Number" Sortable="true" />
+                                <IgbColumn Field="@nameof(Employee.Remote)" Header="Remote" DataType="GridColumnDataType.Boolean" />
+                            </IgbRowIsland>
+                        </IgbRowIsland>
+                    </IgbHierarchicalGrid>
+                </div>
+                break;
+
+            case "pivot":
+                <div class="panel selector">
+                    <IgbPivotDataSelector Grid="PivotGrid" />
+                </div>
+                <div class="grid-host">
+                    <IgbPivotGrid grid-family-slide @ref="PivotGrid" Data="pivotData" PivotConfiguration="pivotConfig"
+                                  Width="100%" Height="100%" />
+                </div>
+                break;
+        }
+    </div>
+</div>

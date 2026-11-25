@@ -1,0 +1,62 @@
+<div class="slide-grid">
+    <section class="slide-copy">
+        <span class="kicker">Going further · IgniteUI.Blazor</span>
+        <h1 class="slide-h">Need more? <span class="accent">Upgrade in place</span></h1>
+        <p class="lead">
+            The commercial <b>IgniteUI.Blazor</b> now builds on <b>IgniteUI.Blazor.Lite</b>.
+            Nothing gets replaced: you add to what you have.
+        </p>
+        <ul class="points">
+            <li><span><b>Lite is a dependency</b>: every Lite component, Grid Lite and your theme keep working</span></li>
+            <li><span>Same namespace, same <code>AddIgniteUIBlazor()</code>, same JS initializer: no script tag to add</span></li>
+            <li><span>Adds the full <b>grid family</b>, <b>Dock Manager</b>, <b>65+ charts</b>, maps and gauges</span></li>
+            <li><span>Evaluate it today: <b>IgniteUI.Blazor.Trial</b> 26.2 beta on NuGet. The next slides run on it</span></li>
+        </ul>
+    </section>
+
+    <section class="slide-demo">
+        <div class="panel">
+            <div class="panel-title"><IgbIcon IconName="nuget" Collection="@Icons.Collection" /> One package next to Lite</div>
+            <pre class="code"><span class="c">&lt;!-- StandupDemo.csproj --&gt;</span>
+&lt;<span class="k">PackageReference</span> Include=<span class="s">"IgniteUI.Blazor.Lite"</span> Version=<span class="s">"1.0.1"</span> /&gt;
+&lt;<span class="k">PackageReference</span> Include=<span class="s">"IgniteUI.Blazor.GridLite"</span> Version=<span class="s">"1.0.0"</span> /&gt;
+<span class="t">+</span> &lt;<span class="k">PackageReference</span> Include=<span class="s">"IgniteUI.Blazor.Trial"</span> Version=<span class="s">"26.2.16-beta.0"</span> /&gt;
+
+<span class="c">&lt;!-- index.html: the grids bring their own stylesheet --&gt;</span>
+<span class="t">+</span> &lt;<span class="k">link</span> rel=<span class="s">"stylesheet"</span> href=<span class="s">"_content/IgniteUI.Blazor/themes/grid/dark/material.css"</span> /&gt;
+
+<span class="c">// Program.cs: unchanged. Optionally preload modules:</span>
+builder.Services.<span class="k">AddIgniteUIBlazor</span>(<span class="k">typeof</span>(<span class="t">IgbGridModule</span>), <span class="k">typeof</span>(<span class="t">IgbDockManagerModule</span>));</pre>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title"><IgbIcon IconName="bolt" Collection="@Icons.Collection" /> What you add</div>
+            <div class="families">
+                @foreach (var family in families)
+                {
+                    <div class="family">
+                        <span class="family-name">@family.Name</span>
+                        <div class="component-tags" role="list">
+                            @foreach (var tag in family.Components)
+                            {
+                                <IgbBadge upgrade-slide Outlined role="listitem" class="@family.Hue">@tag</IgbBadge>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+</div>
+
+@code {
+    private sealed record Family(string Name, string Hue, string[] Components);
+
+    private static readonly Family[] families =
+    [
+        new("Grids", "grids", ["IgbGrid", "IgbTreeGrid", "IgbHierarchicalGrid", "IgbPivotGrid"]),
+        new("Layout", "layout", ["IgbDockManager"]),
+        new("Charts", "charts", ["IgbCategoryChart", "IgbDataChart", "IgbFinancialChart", "IgbPieChart", "IgbDoughnutChart", "IgbSparkline", "IgbTreemap"]),
+        new("Maps & gauges", "gauges", ["IgbGeographicMap", "IgbRadialGauge", "IgbLinearGauge", "IgbBulletGraph"]),
+    ];
+}
