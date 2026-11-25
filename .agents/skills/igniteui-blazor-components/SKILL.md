@@ -3,9 +3,9 @@ description: 'Covers Ignite UI for Blazor non-grid components: project setup and
 license: MIT
 metadata:
     github-path: skills/igniteui-blazor-components
-    github-ref: refs/tags/1.0.0
+    github-ref: refs/tags/1.0.1
     github-repo: https://github.com/IgniteUI/igniteui-blazor
-    github-tree-sha: bdacd7ad2b15a73bf173ade4e479f481e429ffb7
+    github-tree-sha: d8500683909176402f3a65f44645b02a642887f0
 name: igniteui-blazor-components
 user-invocable: true
 ---
@@ -61,16 +61,16 @@ All four use the `IgniteUI.Blazor.Controls` namespace and serve static assets fr
 `igniteui-cli` provides `list_components`, `get_doc`, `search_docs`, `search_api`, `get_api_reference`, all taking `framework: "blazor"`. To enable it, add to `.vscode/mcp.json` (VS Code, key `servers`):
 
 ```json
-{ "servers": { "igniteui-cli": { "command": "npx", "args": ["-y", "@igniteui/mcp-server"] } } }
+{ "servers": { "igniteui-cli": { "command": "npx", "args": ["-y", "igniteui-cli", "mcp"] } } }
 ```
 
 Or `.cursor/mcp.json` / `claude_desktop_config.json` (key `mcpServers`):
 
 ```json
-{ "mcpServers": { "igniteui-cli": { "command": "npx", "args": ["-y", "@igniteui/mcp-server"] } } }
+{ "mcpServers": { "igniteui-cli": { "command": "npx", "args": ["-y", "igniteui-cli", "mcp"] } } }
 ```
 
-Reload the editor afterwards. JetBrains: **Settings → Tools → AI Assistant → MCP Servers**, command `npx`, arguments `-y @igniteui/mcp-server`.
+Reload the editor afterwards. JetBrains: **Settings → Tools → AI Assistant → MCP Servers**, command `npx`, arguments `igniteui-cli mcp`.
 
 ## Related skills
 

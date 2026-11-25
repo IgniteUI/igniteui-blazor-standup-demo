@@ -3,9 +3,9 @@ description: 'Implements a Blazor view from a design image, screenshot, mockup, 
 license: MIT
 metadata:
     github-path: skills/igniteui-blazor-generate-from-image-design
-    github-ref: refs/tags/1.0.0
+    github-ref: refs/tags/1.0.1
     github-repo: https://github.com/IgniteUI/igniteui-blazor
-    github-tree-sha: 94b13d48024736fa9676c7a2bc1a65a88c1bebb0
+    github-tree-sha: 4cd4b76c65fb046b912c4004bd8542a5f0df9610
 name: igniteui-blazor-generate-from-image-design
 user-invocable: true
 ---

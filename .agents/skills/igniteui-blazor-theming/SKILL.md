@@ -3,9 +3,9 @@ description: 'Covers theming and visual customization for Ignite UI for Blazor: 
 license: MIT
 metadata:
     github-path: skills/igniteui-blazor-theming
-    github-ref: refs/tags/1.0.0
+    github-ref: refs/tags/1.0.1
     github-repo: https://github.com/IgniteUI/igniteui-blazor
-    github-tree-sha: 00b490aa4b0b01e39264306fe7f3e1a48b2582d3
+    github-tree-sha: 11b9249bdf648395045ac5e5627d77afefe73550
 name: igniteui-blazor-theming
 user-invocable: true
 ---
